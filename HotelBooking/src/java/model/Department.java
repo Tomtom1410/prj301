@@ -1,32 +1,35 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tom
  */
 public class Department {
-    private String deptID;
-    private String url;
-    private int typeDept;
+    private int deptID;
+    private ArrayList<String> url = new ArrayList<>();
+    private String typeRoom;
     private int price;
     private boolean status;
+    private String deptName;
 
     public Department() {
     }
 
-    public String getDeptID() {
+    public int getDeptID() {
         return deptID;
     }
 
-    public void setDeptID(String deptID) {
+    public void setDeptID(int deptID) {
         this.deptID = deptID;
     }
 
-    public String getUrl() {
+    public ArrayList<String> getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(ArrayList<String> url) {
         this.url = url;
     }
 
@@ -38,12 +41,12 @@ public class Department {
         this.status = status;
     }
 
-    public int getTypeDept() {
-        return typeDept;
+    public String getTypeRoom() {
+        return typeRoom;
     }
 
-    public void setTypeDept(int typeDept) {
-        this.typeDept = typeDept;
+    public void setTypeDept(String typeRoom) {
+        this.typeRoom = typeRoom;
     }
 
     public int getPrice() {
@@ -52,6 +55,14 @@ public class Department {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
     
     
