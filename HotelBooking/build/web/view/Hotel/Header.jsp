@@ -20,9 +20,9 @@
                         <a href="Home"> <span class="glyphicon glyphicon-home"></span> Home</a>
                     </li>
 
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Room Type</a></li>
-                    <li><a href="#">Booking</a></li>
+                    <li><a href="About">About</a></li>
+                    <li><a href="Room">Room Type</a></li>
+                    <li><a href="Room">Booking</a></li>
 
                     <li> <a href="#"><span class="glyphicon glyphicon-envelope"></span> Contact</a> </li>
                 </ul>

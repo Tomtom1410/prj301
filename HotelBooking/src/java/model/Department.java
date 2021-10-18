@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * @author Tom
  */
 public class Department {
+
     private int deptID;
     private ArrayList<String> url = new ArrayList<>();
     private String typeRoom;
@@ -18,6 +19,9 @@ public class Department {
     }
 
     public int getDeptID() {
+        for (String string : url) {
+            
+        }
         return deptID;
     }
 
@@ -64,6 +68,5 @@ public class Department {
     public void setDeptName(String deptName) {
         this.deptName = deptName;
     }
-    
-    
+
 }

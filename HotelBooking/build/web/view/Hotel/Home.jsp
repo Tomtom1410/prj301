@@ -15,6 +15,7 @@
         <!--CSS-->
         <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/FooterStyle.css" rel="stylesheet" type="text/css"/>
 
     </head>
 
@@ -107,7 +108,7 @@
                     <p class="descript2">Đến với Del Luna Hotel, quý khách sẽ được trải nghiệm dịch 
                         vụ Spa cao cấp, trung tâm thể hình hiện đại và các hoạt động giải trí trên biển.
                     </p>
-                    <a href="#">Xem chi tiết</a>
+                    <a href="Room">Xem chi tiết</a>
                 </div>
 
                 <div class="col-md-7 row">

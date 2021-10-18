@@ -61,12 +61,12 @@ public class DepartmentDBContext extends DBContext {
                 d.setTypeDept(rs.getString("roomType"));
                 String url_img = rs.getString("url_image");
                 d.getUrl().add(url_img);
-                String url_1 = rs.getString("url_1");
-                d.getUrl().add(url_1);
-                String url_2 = rs.getString("url_2");
-                d.getUrl().add(url_2);
-                String url_3 = rs.getString("url_3");
-                d.getUrl().add(url_3);
+//                String url_1 = rs.getString("url_1");
+//                d.getUrl().add(url_1);
+//                String url_2 = rs.getString("url_2");
+//                d.getUrl().add(url_2);
+//                String url_3 = rs.getString("url_3");
+//                d.getUrl().add(url_3);
                 depts.add(d);
             }
         } catch (SQLException ex) {
@@ -75,14 +75,50 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-//    public static void main(String[] args) {
-//        DepartmentDBContext db = new DepartmentDBContext();
-//        for (Department d : db.getRoomModel()) {
-//            System.out.print("- " + d.getDeptID() + " " + d.getDeptName() + " " + d.getTypeRoom() + " ");
-//            for (String string : d.getUrl()) {
-//                System.out.print(string + " ");
-//            }
-//            System.out.println("");
-//        }
-//    }
+    public Department getRoomByName(String name) {
+        try {
+            String sql = "select deptID, deptName, [Status], price, Department.roomType,\n"
+                    + "		url_image, url_1, url_2, url_3\n"
+                    + "from Department\n"
+                    + "inner join RoomTypeAndUrl\n"
+                    + "on Department.roomType = RoomTypeAndUrl.roomType\n"
+                    + "where deptName = ? AND [Status] = 0";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, name);
+            rs = stm.executeQuery();
+            Department d = new Department();
+            if (rs.next()) {
+
+                d.setDeptID(rs.getInt("deptID"));
+                d.setDeptName(rs.getString("deptName"));
+                d.setStatus(rs.getBoolean("Status"));
+                d.setPrice(rs.getInt("price"));
+                d.setTypeDept(rs.getString("roomType"));
+                String url_img = rs.getString("url_image");
+                d.getUrl().add(url_img);
+                String url_1 = rs.getString("url_1");
+                d.getUrl().add(url_1);
+                String url_2 = rs.getString("url_2");
+                d.getUrl().add(url_2);
+                String url_3 = rs.getString("url_3");
+                d.getUrl().add(url_3);
+            }
+            return d;
+        } catch (SQLException ex) {
+            Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+
+    public static void main(String[] args) {
+        DepartmentDBContext db = new DepartmentDBContext();
+        Department d = db.getRoomByName("SILVER SINGLE ROOM");
+        String url_image = d.getUrl().get(0);
+        d.getUrl().remove(0);
+        System.out.println(d.getDeptID() + " " + d.getDeptName() + " " + d.getTypeRoom()  + " " + d.getPrice() + " " + url_image);
+        for (String string : d.getUrl()) {
+            System.out.println(string);
+        }
+    }
 }
