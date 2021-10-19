@@ -39,6 +39,8 @@ public class RoomDetailController extends HttpServlet {
         d.getUrl().remove(0);
         request.setAttribute("room", d);
         request.setAttribute("url_image", url_image);
+        String tag = "room";
+        request.setAttribute("tag", tag );
         request.getRequestDispatcher("view/Hotel/RoomDetail.jsp").forward(request, response);
     }
 

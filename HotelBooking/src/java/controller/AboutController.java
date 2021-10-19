@@ -29,6 +29,8 @@ public class AboutController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String tag = "about";
+        request.setAttribute("tag", tag );
        request.getRequestDispatcher("view/Hotel/About.jsp").forward(request, response);
     }
 

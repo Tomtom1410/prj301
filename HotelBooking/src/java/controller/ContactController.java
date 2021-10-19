@@ -5,8 +5,8 @@
  */
 package controller;
 
-import dal.DepartmentDBContext;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tom
  */
-public class HomeCotroller extends HttpServlet {
+public class ContactController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,11 +29,10 @@ public class HomeCotroller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        request.setAttribute("roomType", ddb.getRoomType());
-        String home = "home";
-        request.setAttribute("tag", home );
-        request.getRequestDispatcher("view/Hotel/Home.jsp").forward(request, response);
+        String tag = "contact";
+        
+        request.setAttribute("tag", tag);
+       request.getRequestDispatcher("view/Hotel/Contact.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

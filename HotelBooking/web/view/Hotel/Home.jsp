@@ -14,8 +14,9 @@
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <!--CSS-->
         <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/CSS/HotelStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HomeStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/FooterStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HeaderStyle.css" rel="stylesheet" type="text/css"/>
 
     </head>
 
@@ -104,11 +105,11 @@
 
             <div class="row room">
                 <div class="col-md-5 content">
-                    <h1>NHỮNG CĂN PHÒNG XINH ĐẸP, THOÁNG MÁT</h1>
-                    <p class="descript2">Đến với Del Luna Hotel, quý khách sẽ được trải nghiệm dịch 
-                        vụ Spa cao cấp, trung tâm thể hình hiện đại và các hoạt động giải trí trên biển.
+                    <h1>BEAUTIFUL, COOL ROOMS</h1>
+                    <p class="descript2">Come to Del Luna Hotel, you will experience translation
+                        High-class spa services, modern fitness center and recreational activities on the sea.
                     </p>
-                    <a href="Room">Xem chi tiết</a>
+                    <a style="color: #c9ec4d; font-weight: bold; font-size: 23px; text-decoration-line: revert;" href="Room">Details</a>
                 </div>
 
                 <div class="col-md-7 row">
@@ -131,52 +132,52 @@
             <div class="service">
                 <div>
                     <h3>Del Luna Hotel</h3>
-                    <h1>NHỮNG DỊCH VỤ HẤP DẪN</h1>
+                    <h1>HOT SERVICES</h1>
                 </div>
 
                 <div class="row">
                     <div class="col-md-3 box">
-                        <!-- Món ăn thứ nhất-->
+                        <!-- First dish-->
                         <div><img src="image/Banh cu cai.jpg" class="img-responsive" /></div>
 
                         <div>
-                            <h3>Bữa Ăn Hấp Dẫn</h3>
-                            <p>Một trong những yếu tố hàng đầu để bạn trở nên nhẹ nhàng, thoải mái</p>
+                            <h3>Delicious Meal</h3>
+                            <p>One of the top factors for you to become light and comfortable</p>
                         </div>
-                        <!--                        <div class="clearfix"> </div>-->
-                        <!--Ngăn không cho hộp tiếp theo chạy lên-->
+                        <!-- <div class="clearfix"> </div>-->
+                        <!--Prevent the next box from running up-->
                     </div>
 
                     <div class="col-md-3 box">
-                        <!-- Món ăn thứ hai-->
+                        <!-- Second dish-->
                         <div> <img src="image/ho boi.jpg" class="img-responsive" /></div>
 
                         <div>
-                            <h3> Hồ Bơi Sang Trọng </h3>
-                            <p> Một trong những yếu tố hàng đầu để bạn trở nên nhẹ nhàng, thoải mái</p>
+                            <h3> Luxury Swimming Pool </h3>
+                            <p>One of the top factors for you to become light and comfortable</p>
                         </div>
                     </div>
 
 
 
                     <div class="col-md-3 box">
-                        <!-- Món ăn thứ ba-->
+                        <!-- Third dish-->
                         <div> <img src="image/LAXURY ROOM.jpg" class="img-responsive" /></div>
 
                         <div>
-                            <h3>Phòng Nghỉ Hiện Đại</h3>
-                            <p>Một trong những yếu tố hàng đầu để bạn trở nên nhẹ nhàng, thoải mái</p>
+                            <h3>Modern Room</h3>
+                            <p>One of the top factors for you to be light and comfortable</p>
                         </div>
                         <!--<div class="clearfix"> </div>-->
-                        <!--Ngăn không cho hộp tiếp theo chạy lên-->
+                        <!--Prevent the next box from running up-->
                     </div>
 
                     <div class="col-md-3 box">
-                        <!-- Món ăn thứ tư-->
+                        <!-- Fourth dish-->
                         <div> <img src="image/khu_vui_choi_cho_be.jpg" class="img-responsive" /></div>
                         <div>
-                            <h3> Khu Vui Chơi Cho Bé </h3>
-                            <p>Một trong những yếu tố hàng đầu để bạn trở nên nhẹ nhàng, thoải mái</p>
+                            <h3> Children's Playground </h3>
+                            <p>One of the top factors for you to be light and comfortable</p>
                         </div>
                     </div>
                 </div>

@@ -35,6 +35,8 @@ public class RoomTypeController extends HttpServlet {
         
         ArrayList<Department> depts = ddb.getRoomModel();
         request.setAttribute("depts", depts);
+        String tag = "room";
+        request.setAttribute("tag", tag );
         request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
         
     }
