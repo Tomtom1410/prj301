@@ -14,9 +14,9 @@
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <!--CSS-->
         <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/CSS/HomeStyle.css" rel="stylesheet" type="text/css"/>
-        <link href="${pageContext.request.contextPath}/CSS/FooterStyle.css" rel="stylesheet" type="text/css"/>
-        <link href="${pageContext.request.contextPath}/CSS/HeaderStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HomeStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
 
     </head>
 

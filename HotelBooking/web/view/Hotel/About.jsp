@@ -10,10 +10,10 @@
         <script src="mycode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/CSS/AboutStyle.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/AboutStyle.css" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/CSS/FooterStyle.css" rel="stylesheet" type="text/css"/>
-        <link href="${pageContext.request.contextPath}/CSS/HeaderStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
     </head>
 
     <body>

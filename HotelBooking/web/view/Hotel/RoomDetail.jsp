@@ -10,9 +10,9 @@
         <script src="mycode.js"></script>
         <!-- Bootstrap && CSS-->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="${pageContext.request.contextPath}/CSS/RoomDetailStyle.css" rel="stylesheet" type="text/css" />
-        <link href="${pageContext.request.contextPath}/CSS/FooterStyle.css" rel="stylesheet" type="text/css"/>
-        <link href="${pageContext.request.contextPath}/CSS/HeaderStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/RoomDetailStyle.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
 
     <body>
 

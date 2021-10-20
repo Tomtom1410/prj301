@@ -82,7 +82,7 @@ form{
 }
 
 .room{
-    background-image: url('../image/backgroundRoomjpg.jpg');
+    background-image: url('../../image/backgroundRoomjpg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y: bottom;

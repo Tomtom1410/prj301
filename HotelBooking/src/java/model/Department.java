@@ -1,11 +1,8 @@
 package model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
-/**
- *
- * @author Tom
- */
 public class Department {
 
     private int deptID;
@@ -14,14 +11,20 @@ public class Department {
     private int price;
     private boolean status;
     private String deptName;
+    private Date time;
 
     public Department() {
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
     public int getDeptID() {
-        for (String string : url) {
-            
-        }
         return deptID;
     }
 
@@ -67,6 +70,13 @@ public class Department {
 
     public void setDeptName(String deptName) {
         this.deptName = deptName;
+    }
+
+    public boolean deptNameContainsKey(String keys) {
+        if (this.deptName.contains(keys)) {
+            return true;
+        }
+        return false;
     }
 
 }

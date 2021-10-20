@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package LoginSecurity;
+package ManagementControl;
 
-import dal.AdminstratorDBContext;
+import dal.DepartmentDBContext;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Administrator;
+import model.Department;
 
 /**
  *
  * @author Tom
  */
-public class LoginController extends HttpServlet {
+public class RoomEmpty extends HttpServlet {
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -30,9 +33,13 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean isLogin = true;
-        request.setAttribute("isLogin", isLogin);
-        request.getRequestDispatcher("view/Login/login.jsp").forward(request, response);
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        ArrayList<Department> roomEmpty = ddb.getRoomByKey("0");
+        String tag = "check-rent";
+        request.setAttribute("roomEmpty", roomEmpty);
+        request.setAttribute("tagMenu", tag);
+        request.getRequestDispatcher("../view/Management/RoomEmpty.jsp").forward(request, response);
+        
     }
 
     /**
@@ -46,19 +53,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        AdminstratorDBContext db = new AdminstratorDBContext();
-        
-        Administrator acc = db.getAccount(username, password);
-        if (acc == null) {
-            request.getSession().setAttribute("account", null);
-            request.setAttribute("isLogin", false);
-            request.getRequestDispatcher("view/Login/login.jsp").forward(request, response);
-        }else{
-            request.getSession().setAttribute("account", acc);
-            response.sendRedirect("Management/Home");
-        }
+//        processRequest(request, response);
     }
 
     /**
