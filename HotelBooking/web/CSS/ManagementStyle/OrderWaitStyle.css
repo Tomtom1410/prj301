@@ -1,0 +1,76 @@
+.right {
+    height: auto;
+}
+
+.right .title {
+    margin: 0 0 0 -2%;
+    padding: 0 0 4% 3%;
+    height: 8rem;
+    border-bottom: 1px solid grey;
+}
+
+.right .title div:nth-child(2) {
+    font-size: 20px;
+}
+
+.right .row .Search input {
+    /* border-radius: none; */
+    width: 20rem;
+    height: 4rem;
+    margin: 5% 0;
+}
+
+.content table {
+    /* width: 100%; */
+    margin: 3% 0;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.content td {
+    border: 1px solid black;
+    text-align: center;
+    height: 3.5rem;
+    width: 10%;
+}
+
+.content tr:first-child td {
+    color: blue;
+    font-weight: bold;
+}
+
+.detail {
+    /* display: none; */
+    border: 1px solid grey;
+    margin: 2% 0;
+    padding: 1%;
+}
+
+.detail .up input {
+    width: 18em;
+    margin: 6% 0;
+}
+
+.detail button {
+    width: 5em;
+    margin: 3% 15%;
+    color: white;
+    border: none;
+    padding: 1%;
+}
+
+.detail button:nth-last-child(2) {
+    background-color: green;
+}
+
+.detail button:nth-last-child(2):hover {
+    background-color: rgb(11, 80, 11);
+}
+
+.detail button:last-child {
+    background-color: red;
+}
+
+.detail button:last-child:hover {
+    background-color: #770a0a;
+}

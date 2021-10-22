@@ -7,6 +7,7 @@ package controller;
 
 import dal.DepartmentDBContext;
 import java.io.IOException;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,24 +18,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Tom
  */
 public class HomeCotroller extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        request.setAttribute("roomType", ddb.getRoomType());
-        String home = "home";
-        request.setAttribute("tag", home );
-        request.getRequestDispatcher("view/Hotel/Home.jsp").forward(request, response);
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -48,7 +31,14 @@ public class HomeCotroller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        request.setAttribute("roomType", ddb.getRoomType());
+        String home = "home";
+        request.setAttribute("tag", home);
+        boolean flag = true;
+        request.setAttribute("flag", flag);
+        request.getRequestDispatcher("view/Hotel/Home.jsp").forward(request, response);
+
     }
 
     /**
@@ -62,7 +52,36 @@ public class HomeCotroller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String typeRoom = request.getParameter("typeRoom");
+        String checkIn = request.getParameter("checkIn");
+        String checkOut = request.getParameter("checkOut");
+//        String noOfPeople = request.getParameter("noOfPeople");
+        boolean check = false;
+        if (!checkIn.equals("") && !checkOut.equals("")) {
+            Date a = Date.valueOf(request.getParameter("checkIn"));
+            Date b = Date.valueOf(request.getParameter("checkOut"));
+            check = a.after(b);
+        }
+
+        if (checkIn.equals("") || checkOut.equals("") || check) {
+            DepartmentDBContext ddb = new DepartmentDBContext();
+            request.setAttribute("roomType", ddb.getRoomType());
+            String home = "home";
+            request.setAttribute("tag", home);
+            boolean flag = false;
+            request.setAttribute("flag", flag);
+            request.getRequestDispatcher("view/Hotel/Home.jsp").forward(request, response);
+        } else {
+            if (typeRoom.equals("all")) {
+                response.sendRedirect("Room");
+            } else {
+                DepartmentDBContext ddb = new DepartmentDBContext();
+                request.setAttribute("depts", ddb.searchRoom(typeRoom));
+                String tag = "room";
+                request.setAttribute("tag", tag);
+                request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
+            }
+        }
     }
 
     /**

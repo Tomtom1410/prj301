@@ -60,28 +60,37 @@
                 <!--slider end-->
 
                 <div class="col-md-3 col-sm-12 booking">
-                    <form action="">
+                    <form action="Room_detail" method="POST">
+                        <c:if test="${!flag}">
+                            <p style="color: #f12626; font-weight: bold;">Please enter valid information and do not leave it blank!</p>
+                        </c:if>
+                        <c:if test="${!error}">
+                            <p style="color: #f12626; font-weight: bold;">Name/Email/Phone/Check-in/Check-out not valid. Please review!</p>
+                        </c:if>    
                         <table>
                             <tr>
                                 <td>Booking now</td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" placeholder="Name"></td>
+                                <td><input type="hidden" name="roomName" value="${room.deptName}"></td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" placeholder="Phone Number"></td>
+                                <td><input class="in" type="text" name="customerName" placeholder="Name"></td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" placeholder="E-mail:"></td>
+                                <td><input class="in" type="text" name="phone" placeholder="Phone Number"></td>
+                            </tr>
+                            <tr>
+                                <td><input class="in" type="text" name="email" placeholder="E-mail:"></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <select class="in" name="" id="">
-                                        <option value="">Number of rooms</option>
-                                        <option value="">1</option>
-                                        <option value="">2</option>
-                                        <option value="">3</option>
-                                        <option value="">4</option>
+                                    <select class="in" name="noOfRoom">
+                                        <option value="0">Number of rooms</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
                                     </select>
                                 </td>
                             </tr>
@@ -89,14 +98,14 @@
                             <tr>
                                 <td>Check-in:</td>
                             </tr>
-                            <td><input class="in" type="date" placeholder="E-mail:"></td>
+                            <td><input class="in" type="date" name="checkIn"></td>
                             </tr>
 
                             <tr>
                             <tr>
                                 <td>Check-out:</td>
                             </tr>
-                            <td><input class="in" type="date" placeholder="E-mail:"></td>
+                            <td><input class="in" type="date" name="checkOut"></td>
                             </tr>
 
 

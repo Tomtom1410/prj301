@@ -12,13 +12,23 @@ import java.sql.Date;
  * @author Tom
  */
 public class OrderWait {
+
     private int orderWaitID;
     private Date checkIn;
     private Date checkOut;
     private Customer customer;
     private Department department;
+    private int noOfRoom;
 
     public OrderWait() {
+    }
+
+    public int getNoOfRoom() {
+        return noOfRoom;
+    }
+
+    public void setNoOfRoom(int noOfRoom) {
+        this.noOfRoom = noOfRoom;
     }
 
     public int getOrderWaitID() {
@@ -60,7 +70,5 @@ public class OrderWait {
     public void setDepartment(Department department) {
         this.department = department;
     }
-    
-    
-    
+
 }

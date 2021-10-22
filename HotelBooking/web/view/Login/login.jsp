@@ -33,7 +33,6 @@
                     <br>
                     <c:if test = "${!requestScope.isLogin}">
                         <span>Login failed! Please check username or password again!</span>
-
                     </c:if>
                     <br>
                     <div class="wrapper">

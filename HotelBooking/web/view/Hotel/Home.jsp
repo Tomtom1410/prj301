@@ -69,23 +69,26 @@
 
                 <!-- main-->
                 <div class="row">
-                    <form action="#" method="">
-                        <table class="booking">
-                            <tr>
-                                <td>Check-in*:</td>
-                                <td>Check-out*:</td>
-                                <td>Choose Room:</td>
-                                <td>Number of people:</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><input class="infor" type="date" name="checkIn"></td>
-                                <td><input class="infor" type="date" name="checkOut"></td>
-                                <td>
-                                    <select class="infor" name="typeRoom">
-                                        <option>Choose room</option>
+                    <form action="Home" method="POST">
+                    <c:if test="${!flag}">
+                        <p style="color: #f12626; margin: 0 8%;">Please choose date Check-in/Check-out valid!</p>
+                    </c:if>
+                    <table class="booking">
+                        <tr>
+                            <td>Check-in*:</td>
+                            <td>Check-out*:</td>
+                            <td>Choose Room:</td>
+                            <td>Number of people:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input class="infor" type="date" name="checkIn"></td>
+                            <td><input class="infor" type="date" name="checkOut"></td>
+                            <td>
+                                <select style="text-align: left;" class="infor" name="typeRoom">
+                                    <option value="all">Choose room</option>
                                     <c:forEach items="${roomType}" var="rt">
-                                        <option>${rt}</option>
+                                        <option value="${rt}">${rt}</option>
                                     </c:forEach>
                                 </select>
                             </td>
