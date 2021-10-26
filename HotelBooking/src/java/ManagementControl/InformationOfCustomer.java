@@ -5,20 +5,38 @@
  */
 package ManagementControl;
 
-import dal.DepartmentDBContext;
+import dal.OrderWaitDBContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Department;
+import model.OrderWait;
 
 /**
  *
  * @author Tom
  */
-public class RoomEmpty extends HttpServlet {
+public class InformationOfCustomer extends HttpServlet {
+     /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        OrderWaitDBContext odb = new OrderWaitDBContext();
+        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait();
+        request.setAttribute("orders", OrderWait);
+        String tag = "order";
+        request.setAttribute("tagMenu", tag);
+        request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -32,15 +50,7 @@ public class RoomEmpty extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        ArrayList<Department> roomEmpty = ddb.getRoomByKey("0");
-        String tag = "check-rent";
-        request.setAttribute("roomEmpty", roomEmpty);
-        request.setAttribute("tagMenu", tag);
-        String subTag = "eR";
-        request.setAttribute("ept", subTag);
-        request.getRequestDispatcher("../view/Management/RoomEmpty.jsp").forward(request, response);
-        
+        processRequest(request, response);
     }
 
     /**
@@ -54,7 +64,7 @@ public class RoomEmpty extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**

@@ -69,7 +69,8 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-    public Department getRoomByName(String name) {
+    public ArrayList<Department> getRoomByName(String name) {
+        ArrayList<Department> deptList = new ArrayList<>();
         try {
             String sql = "select deptID, deptName, [Status], price, Department.roomType,\n"
                     + "		url_image, url_1, url_2, url_3\n"
@@ -80,8 +81,9 @@ public class DepartmentDBContext extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, name);
             rs = stm.executeQuery();
-            Department d = new Department();
-            if (rs.next()) {
+            
+            while (rs.next()) {
+                Department d = new Department();
                 d.setDeptID(rs.getInt("deptID"));
                 d.setDeptName(rs.getString("deptName"));
                 d.setStatus(rs.getBoolean("Status"));
@@ -95,22 +97,23 @@ public class DepartmentDBContext extends DBContext {
                 d.getUrl().add(url_2);
                 String url_3 = rs.getString("url_3");
                 d.getUrl().add(url_3);
+                
+                deptList.add(d);
             }
-            return d;
         } catch (SQLException ex) {
             Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
-
+        return deptList;
     }
 
     public ArrayList<Department> getRoomByKey(String status) {
         ArrayList<Department> depts = new ArrayList<>();
         try {
-            String sql = "select Department.deptID, deptName,[Status], CheckIn, CheckOut\n"
-                    + "from Department\n"
-                    + "left join OrderWait on Department.deptID = OrderWait.deptID\n"
-                    + "where [Status] = ?";
+            String sql = "select Department.deptID, Department.deptName, Department.[Status], CheckIn, CheckOut\n"
+                    + "from Department \n"
+                    + "left join Booking_Detail on Booking_Detail.deptID = Department.deptID\n"
+                    + "left join OrderWait on Booking_Detail.orderWaitID = OrderWait.CustomerID\n"
+                    + "where Department.[Status] = ?";
             stm = connection.prepareStatement(sql);
             stm.setString(1, status);
             rs = stm.executeQuery();
@@ -163,11 +166,11 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-    public static void main(String[] args) {
-        DepartmentDBContext db = new DepartmentDBContext();
-        ArrayList<Department> d = db.searchRoom("SILVER ROOM");
-        for (Department d1 : d) {
-            System.out.println(d1.getDeptName());
-        }
-    }
+//    public static void main(String[] args) {
+//        DepartmentDBContext db = new DepartmentDBContext();
+//        ArrayList<Department> d = db.searchRoom("SILVER ROOM");
+//        for (Department d1 : d) {
+//            System.out.println(d1.getDeptName());
+//        }
+//    }
 }

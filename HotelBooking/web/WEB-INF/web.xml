@@ -6,27 +6,27 @@
     </servlet>
     <servlet>
         <servlet-name>HomeCotroller</servlet-name>
-        <servlet-class>controller.HomeCotroller</servlet-class>
+        <servlet-class>HotelController.HomeCotroller</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RoomTypeController</servlet-name>
-        <servlet-class>controller.RoomTypeController</servlet-class>
+        <servlet-class>HotelController.RoomTypeController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RoomDetailController</servlet-name>
-        <servlet-class>controller.RoomDetailController</servlet-class>
+        <servlet-class>HotelController.RoomDetailController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AboutController</servlet-name>
-        <servlet-class>controller.AboutController</servlet-class>
+        <servlet-class>HotelController.AboutController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>BookingController</servlet-name>
-        <servlet-class>controller.BookingController</servlet-class>
+        <servlet-class>HotelController.BookingController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ContactController</servlet-name>
-        <servlet-class>controller.ContactController</servlet-class>
+        <servlet-class>HotelController.ContactController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RoomEmpty</servlet-name>
@@ -39,6 +39,14 @@
     <servlet>
         <servlet-name>HomeController</servlet-name>
         <servlet-class>ManagementControl.HomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InformationOfCustomer</servlet-name>
+        <servlet-class>ManagementControl.InformationOfCustomer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookingDetail</servlet-name>
+        <servlet-class>ManagementControl.BookingDetail</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/Management/Home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformationOfCustomer</servlet-name>
+        <url-pattern>/Management/InformationOfCustomer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingDetail</servlet-name>
+        <url-pattern>/Management/BookingDetail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

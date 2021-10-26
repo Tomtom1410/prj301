@@ -3,22 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package ManagementControl;
 
+import dal.DepartmentDBContext;
+import dal.OrderWaitDBContext;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Department;
+import model.OrderWait;
 
 /**
  *
  * @author Tom
  */
-public class BookingController extends HttpServlet {
+public class BookingDetail extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -32,11 +34,29 @@ public class BookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        ArrayList<Department> depts = ddb.getRoomModel();
-//        request.setAttribute("depts", depts);
-        String tag = "booking";
-        request.setAttribute("tag", tag);
-        request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
+        int orderWaitID = Integer.parseInt(request.getParameter("orderWaitID"));
+        
+        
+
+        OrderWaitDBContext odb = new OrderWaitDBContext();
+        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait();
+        OrderWait o = new OrderWait();
+        for (OrderWait od : OrderWait) {
+            if (od.getOrderWaitID() == orderWaitID) {
+                o = od;
+                break;
+            }
+        }
+        
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        
+        ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName());
+        request.setAttribute("roomByName", roomByName);
+        request.setAttribute("o", o);
+        request.setAttribute("orders", OrderWait);
+        String tag = "order";
+        request.setAttribute("tagMenu", tag);
+        request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
     }
 
     /**

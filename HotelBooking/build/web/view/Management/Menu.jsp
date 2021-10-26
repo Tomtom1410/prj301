@@ -16,10 +16,10 @@
                     </c:if>
                     href="RoomEmpty"><span class="glyphicon glyphicon-refresh"></span> Rent - Check out</a></li>
             <li><a 
-                    <c:if test="${tagMenu eq \"xxx\"}">
+                    <c:if test="${tagMenu eq \"order\"}">
                         style="background-color: gray; color: white;padding: 3%;"
                     </c:if>
-                    href="#"><span class="glyphicon glyphicon-user"></span> Information Of Customer</a></li>
+                    href="InformationOfCustomer"><span class="glyphicon glyphicon-user"></span> Information Of Customer</a></li>
             <li><a
                     <c:if test="${tagMenu eq \"xxx\"}">
                         style="background-color: gray; color: white;padding: 3%;"

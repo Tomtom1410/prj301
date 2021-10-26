@@ -16,7 +16,7 @@
             </div>
             <!-- /.navbar-collapse -->
             <div>
-                <a href="Room"><button class="button-left">Booking</button></a>
+                <a href="Booking"><button class="button-left">Booking</button></a>
             </div>
 
         </div>

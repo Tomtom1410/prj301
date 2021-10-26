@@ -3,20 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package HotelController;
 
+import dal.DepartmentDBContext;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Department;
 
 /**
  *
  * @author Tom
  */
-public class AboutController extends HttpServlet {
+public class RoomTypeController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,9 +31,14 @@ public class AboutController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String tag = "about";
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        
+        ArrayList<Department> depts = ddb.getRoomModel();
+        request.setAttribute("depts", depts);
+        String tag = "room";
         request.setAttribute("tag", tag );
-       request.getRequestDispatcher("view/Hotel/About.jsp").forward(request, response);
+        request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

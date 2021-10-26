@@ -49,7 +49,7 @@
                     </div>
                     <div class="content">
                         <h1>${room.deptName}</h1>
-                        <p class="Price">Price: ${room.price} / Day</p>
+                        <p class="Price">Price: ${room.price}$ / Day</p>
                         <p>Hotel Del Luna is a motel established in 20xx with 60 rooms of different sizes to suit many needs of customers. System of modern equipment, air-conditioner,
                             television, wooden tables and chairs, wifi wave and shuttle services to tourist attractions. Designed and decorated in a luxurious and noble style. 
                             The equipment and rooms of the motel - hotel are very comfortable and modern to bring satisfaction and comfort to customers during their
@@ -60,7 +60,7 @@
                 <!--slider end-->
 
                 <div class="col-md-3 col-sm-12 booking">
-                    <form action="Room_detail" method="POST">
+                    <form action="Booking" method="POST">
                         <c:if test="${!flag}">
                             <p style="color: #f12626; font-weight: bold;">Please enter valid information and do not leave it blank!</p>
                         </c:if>

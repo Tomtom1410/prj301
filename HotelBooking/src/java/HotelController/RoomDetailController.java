@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package HotelController;
 
 import dal.DepartmentDBContext;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import model.Department;
  *
  * @author Tom
  */
-public class RoomTypeController extends HttpServlet {
+public class RoomDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,14 +30,22 @@ public class RoomTypeController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String name = request.getParameter("deptName");
+
         DepartmentDBContext ddb = new DepartmentDBContext();
-        
-        ArrayList<Department> depts = ddb.getRoomModel();
-        request.setAttribute("depts", depts);
+        Department d = ddb.getRoomByName(name).get(0);;
+        String url_image = d.getUrl().get(0);
+        d.getUrl().remove(url_image);
+
+        request.setAttribute("room", d);
+        request.setAttribute("url_image", url_image);
         String tag = "room";
-        request.setAttribute("tag", tag );
-        request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
-        
+        request.setAttribute("tag", tag);
+        boolean flag = true;
+        request.setAttribute("flag", flag);
+        boolean error = true;
+        request.setAttribute("error", error);
+        request.getRequestDispatcher("view/Hotel/RoomDetail.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,18 +1,16 @@
 package model;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Tom
  */
 public class Customer {
+
     private int customerID;
     private String customerName;
     private String phone;
     private String email;
     private String address;
-    ArrayList<Department> departments;
 
     public Customer() {
     }
@@ -56,15 +54,4 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public ArrayList<Department> getDepartments() {
-        return departments;
-    }
-
-    public void setDepartments(ArrayList<Department> departments) {
-        this.departments = departments;
-    }
-    
-    
-    
 }

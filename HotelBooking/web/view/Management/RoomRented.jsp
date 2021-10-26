@@ -33,15 +33,19 @@
 
                     <div class="content">
                         <ul>
-                            <li class="active"><a href="RoomEmpty">Empty room</a></li>
-                            <li><a href="RoomRented">The room is rented</a></li>
-                        </ul>
+                            <li><a href="RoomEmpty">Empty room</a></li>
+                            <li><a 
+                                <c:if test="${tagMenu eq \"check-rent\"}">
+                                    style="background-color: #e9d1d1; color: red; padding: 3%;"
+                                </c:if>
+                                href="RoomRented">The room is rented</a></li>
+                    </ul>
 
-                        <div class="typeRoom">
-                            <div class="first">
-                                <p>Single Room</p>
-                            </div>
-                            <div class="row">
+                    <div class="typeRoom">
+                        <div class="first">
+                            <p>Single Room</p>
+                        </div>
+                        <div class="row">
                             <c:forEach items="${roomNotEmpty}" var="rN">
                                 <c:if test="${rN.deptNameContainsKey(\"SINGLE\")}">
                                     <div class="col-md-2 Room">
