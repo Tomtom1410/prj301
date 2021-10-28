@@ -19,10 +19,19 @@ public class OrderWait {
     private Customer customer;
     private Department department;
     private int noOfRoom;
+    private boolean Rented;
 
     public OrderWait() {
     }
 
+    public boolean isRented() {
+        return Rented;
+    }
+
+    public void setRented(boolean Rented) {
+        this.Rented = Rented;
+    }
+    
     public int getNoOfRoom() {
         return noOfRoom;
     }

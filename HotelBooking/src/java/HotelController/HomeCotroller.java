@@ -82,6 +82,7 @@ public class HomeCotroller extends HttpServlet {
                 request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
             }
         }
+
     }
 
     /**

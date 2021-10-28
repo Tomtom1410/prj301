@@ -1,9 +1,3 @@
-<%-- 
-    Document   : OrderWait
-    Created on : Oct 20, 2021, 7:35:21 PM
-    Author     : Tom
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,7 +7,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Del Luna Management</title>
-        <script src="mycode.js"></script>
+        <!--java Script-->
+        <script src="${pageContext.request.contextPath}/JavaScript/ManagementCode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/OrderWaitStyle.css" rel="stylesheet" type="text/css" />
@@ -33,18 +28,30 @@
                         </div>
                     </div>
                     <div class="row information">
-                        <div class="content col-md-8">
-                            <table>
-                                <tr>
-                                    <td>Customer Name</td>
-                                    <td>Phone Number</td>
-                                    <td>No Of Rooms</td>
-                                    <td>Room Type</td>
-                                    <td>Check-in</td>
-                                    <td>Check-out</td>
-                                    <td>Details</td>
-
-                                </tr>
+                        <div class="Banner">
+                            <ul>
+                                <li>
+                                    <a 
+                                    <c:if test="${title eq \"wait\"}">
+                                        style="background-color: #e9d1d1; color: red; padding: 3%;"
+                                    </c:if> href="InformationOfCustomerWait">Orders Wait
+                                </a>
+                            </li>
+                            <li><a href="InformationOfCustomerHadRoom">Orders Have Room</a></li>
+                        </ul>
+                    </div>
+                    <div class="content col-md-8">
+                        <table>
+                            <tr>
+                                <td>Customer Name</td>
+                                <td>Phone Number</td>
+                                <td>No Of Rooms</td>
+                                <td>Room Type</td>
+                                <td>Check-in</td>
+                                <td>Check-out</td>
+                                <td>Rented</td>
+                                <td>Details</td>
+                            </tr>
                             <c:forEach items="${orders}" var="o">
                                 <tr>
                                     <td>${o.customer.customerName}</td>
@@ -53,65 +60,71 @@
                                     <td>${o.department.deptName}</td>
                                     <td>${o.checkIn}</td>
                                     <td>${o.checkOut}</td>
+                                    <td>${o.isRented()?"Yes":"No"}</td>
                                     <td><a href="BookingDetail?orderWaitID=${o.orderWaitID}">Details</a></td>
 
                                 </tr>
-
                             </c:forEach>
-
                         </table>
+
+                        <div id="paggingBottom" class="pageLine" style=" margin: 1%; float: right;"></div>
+                        <script>
+                            generatePagger('paggingBottom',${requestScope.pageIndex},${requestScope.totalPage}, '${requestScope.url}', 2);
+                        </script>
                     </div>
                     <c:if test="${o != null}">
                         <div class="detail col-md-4">
-                            <form action="">
+                            <form action="BookingDetail" method="POST">
+                                <c:if test="${flag eq \"false\"}">
+                                    <p style="color: red;">Please check the room. The number of rooms is
+                                        different from the number of rooms the customer wants!</p>
+                                    </c:if>
                                 <table>
                                     <tr>
-                                        <td>Name:</td>
-                                        <td class="up"><input name="customerName" type="text" value="${o.customer.customerName}"></td>
+                                        <td><input type="hidden" name="oID" value="${o.orderWaitID}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Phone:</td>
-                                        <td class="up"><input name="phone" type="text" value="${o.customer.phone}"></td>
+                                        <td>Name: ${o.customer.customerName}</td>
                                     </tr>
                                     <tr>
-                                        <td>Email:</td>
-                                        <td class="up"><input name="email" type="text" value="${o.customer.email}"></td>
+                                        <td>Phone: ${o.customer.phone}</td>
                                     </tr>
                                     <tr>
-                                        <td>Check-in:</td>
-                                        <td class="up"><input name="checkIn" type="date" value="${o.checkIn}"></td>
+                                        <td>Email: ${o.customer.email}</td>
                                     </tr>
                                     <tr>
-                                        <td>Check-out:</td>
-                                        <td class="up"><input name="checkOut" type="date" value="${o.checkOut}"></td>
+                                        <td>Check-in: ${o.checkIn}</td>
                                     </tr>
                                     <tr>
-                                        <td>Room type:</td>
-                                        <td class="up"><input name="deptName" type="text" value="${o.department.deptName}"></td>
+                                        <td>Check-out: ${o.checkOut}</td>
                                     </tr>
                                     <tr>
-                                        <td>Number of rooms:</td>
                                         <td>
-                                            <select name="noOfRoom">
-                                                <option ${o.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
-                                                <option ${o.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
-                                                <option ${o.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
-                                                <option ${o.noOfRoom == 4 ? "selected=\"selected\"" : ""} value="4">4</option>
-                                            </select>
+                                            <input type="hidden" name="roomByName" value="${o.department.deptName}">
+                                            Room type: ${o.department.deptName}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Choose room: </td>
                                         <td>
+                                            <input type="hidden" name="noOfRoom" value="${o.noOfRoom}">
+                                            Number of rooms: ${o.noOfRoom}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Choose room: 
                                             <c:forEach items="${roomByName}" var="r">
-                                                <input name="deptID" type="checkbox"> ${r.deptID}
+                                                <input name="deptID" type="checkbox" 
+                                                       value="${r.deptID}"> ${r.deptID}
                                             </c:forEach>
                                         </td>
                                     </tr>
                                 </table>
-                                <button class="save" type="submit">Save</button>
+                                <c:if test="${notic}">
+                                    <p style="color: red; font-weight: bold">Insert done!</p>
+                                </c:if>
+                                <button class="save" style="margin: 4% 40%;" type="submit">Save</button>
                             </form>
-                            <button class="del" type="submit">Delete</button>
+
                         </div>
                     </c:if>
                 </div>

@@ -5,16 +5,20 @@
  */
 package ManagementControl;
 
-import dal.DepartmentDBContext;
+import dal.OrderWaitDBContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Department;
+import model.OrderWait;
 
-public class RoomRented extends HttpServlet {
+/**
+ *
+ * @author Tom
+ */
+public class InformationOfCustomerHadRoom extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,14 +31,29 @@ public class RoomRented extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        ArrayList<Department> roomNotEmpty = ddb.getRoomByKey("1");
-
-        request.setAttribute("roomNotEmpty", roomNotEmpty);
-        String tag = "check-rent";
+        int pageSize = 1;
+        String raw_page = request.getParameter("page");
+        if (raw_page == null || raw_page.length() == 0) {
+            raw_page = "1";
+        }
+        int pageIndex = Integer.parseInt(raw_page);
+        boolean rented = true;
+        OrderWaitDBContext odb = new OrderWaitDBContext();
+        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, rented);
+        request.setAttribute("orders", OrderWait);
+        String tag = "order";
         request.setAttribute("tagMenu", tag);
-        request.getRequestDispatcher("../view/Management/RoomRented.jsp").forward(request, response);
 
+        String title = "hadRoom";
+        request.setAttribute("title", title);
+
+        int totalRow = odb.totalRow();
+        int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
+        String url = "InformationOfCustomerHadRoom?page=";
+        request.setAttribute("url", url);
+        request.setAttribute("pageIndex", pageIndex);
+        request.setAttribute("totalPage", totalPage);
+        request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -20,6 +20,21 @@
     margin: 5% 0;
 }
 
+.Banner ul{
+    display: flex;
+    border-bottom: 1px solid grey;
+    margin: 0 0 0 -0.1%;
+    padding: 0;
+}
+
+.Banner ul li{
+    margin: 1% 0 0 1%;
+    width: 12%;
+    height: 46px;
+    list-style: none;
+    font-weight: 600;
+    text-align: center;
+}
 .content table {
     /* width: 100%; */
     margin: 3% 0;
@@ -39,6 +54,34 @@
     font-weight: bold;
 }
 
+
+.pageLine a
+{
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    background-color: green;
+    color: white;
+    font-weight: bolder;
+    margin: 0 3px;
+    padding: 5px;
+}
+
+.pageLine{
+    margin: 1%;
+}
+.pageLine span {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    background-color: #e6dfdf;
+    color: red;
+    font-weight: bolder;
+    font-weight: bold;
+    margin: 0 3px;
+    padding: 5px;
+}
+
 .detail {
     border: 1px solid grey;
     margin: 2% 0;
@@ -47,14 +90,26 @@
     border-radius: 2%;
 }
 
-.detail .up input {
+.detail td{
+    color: green;
+    font-weight: bolder;
+    width: 100%;
+    padding: 2% 0;
+}
+
+.detail .up input, select {
     width: 18em;
-    margin: 6% 0;
+    height: 2em;
+    /*margin: 6% 0;*/
+}
+
+.detail .control{
+    display: flex;
 }
 
 .detail button {
     width: 5em;
-    margin: 1% 40%;
+    margin: 4% 15%;
     color: white;
     border: none;
     padding: 1%;

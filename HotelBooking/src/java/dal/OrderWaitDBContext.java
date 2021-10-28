@@ -40,14 +40,16 @@ public class OrderWaitDBContext extends DBContext {
                 o.getCustomer().setCustomerID(rs.getInt("customerID"));
             }
 
-            String sql_insertOrder = "INSERT INTO [OrderWait]\n"
+            String sql_insertOrder = "INSERT INTO[OrderWait]\n"
                     + "           ([deptName]\n"
                     + "           ,[CustomerID]\n"
                     + "           ,[CheckIn]\n"
                     + "           ,[CheckOut]\n"
-                    + "           ,[noOfRooms])\n"
+                    + "           ,[noOfRooms]\n"
+                    + "           ,[Rented])\n"
                     + "     VALUES\n"
                     + "           (?\n"
+                    + "           ,?\n"
                     + "           ,?\n"
                     + "           ,?\n"
                     + "           ,?\n"
@@ -58,6 +60,7 @@ public class OrderWaitDBContext extends DBContext {
             stm_o.setDate(3, o.getCheckIn());
             stm_o.setDate(4, o.getCheckOut());
             stm_o.setInt(5, o.getNoOfRoom());
+            stm_o.setBoolean(6, false);
             stm_o.executeUpdate();
 
             connection.commit();
@@ -77,14 +80,22 @@ public class OrderWaitDBContext extends DBContext {
         }
     }
 
-    public ArrayList<OrderWait> getInformationOrderWait() {
+    public ArrayList<OrderWait> getInformationOrderWait(int pageIndex, int pageSize, boolean rented) {
         ArrayList<OrderWait> orderWaits = new ArrayList<>();
         try {
-            String sql = "SELECT Customer.CustomerID, Customer.CustomerName, Customer.Email, Customer.Phone,\n"
-                    + "	CheckIn, CheckOut, [Address], deptName, noOfRooms, orderWaitID\n"
-                    + "FROM OrderWait\n"
-                    + "INNER JOIN Customer ON Customer.CustomerID = OrderWait.CustomerID";
+            String sql = " SELECT * \n"
+                    + " FROM  (SELECT ROW_NUMBER() OVER (ORDER BY OrderWaitID asc) as rownum,\n"
+                    + "			Customer.CustomerID, CustomerName, Phone, Email, [Address]	\n"
+                    + "			,orderWaitID, deptName, CheckIn, CheckOut, noOfRooms,Rented\n"
+                    + "		FROM OrderWait \n"
+                    + "		inner join Customer on Customer.CustomerID = OrderWait.CustomerID)  as O \n"
+                    + "WHERE  rownum >= (? - 1)*? + 1 AND rownum <= ? * ? AND Rented = ? ";
             stm = connection.prepareStatement(sql);
+            stm.setInt(1, pageIndex);
+            stm.setInt(2, pageSize);
+            stm.setInt(3, pageIndex);
+            stm.setInt(4, pageSize);
+            stm.setBoolean(5, rented);
             rs = stm.executeQuery();
             while (rs.next()) {
                 OrderWait o = new OrderWait();
@@ -95,14 +106,15 @@ public class OrderWaitDBContext extends DBContext {
                 c.setPhone(rs.getString("Phone"));
                 c.setAddress(rs.getString("Address"));
                 o.setCustomer(c);
-                
-                Department d = new  Department();
+
+                Department d = new Department();
                 d.setDeptName(rs.getString("deptName"));
                 o.setDepartment(d);
                 o.setNoOfRoom(rs.getInt("noOfRooms"));
                 o.setCheckIn(rs.getDate("CheckIn"));
                 o.setCheckOut(rs.getDate("CheckOut"));
                 o.setOrderWaitID(rs.getInt("orderWaitID"));
+                o.setRented(rs.getBoolean("Rented"));
                 orderWaits.add(o);
             }
         } catch (SQLException ex) {
@@ -111,9 +123,84 @@ public class OrderWaitDBContext extends DBContext {
         return orderWaits;
     }
 
+    public OrderWait checkChangeInforOrder(OrderWait o) {
+        try {
+            String sql = "select * from OrderWait\n"
+                    + "where orderWaitID = ? and CustomerID = ? \n"
+                    + "and CheckIn = ? and CheckOut = ? and deptName = ?\n"
+                    + "and noOfRooms = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, o.getOrderWaitID());
+            stm.setInt(2, o.getCustomer().getCustomerID());
+            stm.setDate(3, o.getCheckIn());
+            stm.setDate(4, o.getCheckOut());
+            stm.setString(5, o.getDepartment().getDeptName());
+            stm.setInt(6, o.getNoOfRoom());
+
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                return o;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    public void updateOrder(OrderWait o) {
+        try {
+            connection.setAutoCommit(false);
+            String sql = "UPDATE [OrderWait]\n"
+                    + "   SET [deptName] = ?\n"
+                    + "      ,[CheckIn] = ?\n"
+                    + "      ,[CheckOut] = ?\n"
+                    + "      ,[noOfRooms] = ?\n"
+                    + " WHERE orderWaitID = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, o.getDepartment().getDeptName());
+            stm.setDate(2, o.getCheckIn());
+            stm.setDate(3, o.getCheckOut());
+            stm.setInt(4, o.getNoOfRoom());
+            stm.setInt(5, o.getOrderWaitID());
+            stm.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public int totalRow() {
+        try {
+            String sql = "select COUNT(*) as totalRow from OrderWait";
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("totalRow");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+    
+
     public static void main(String[] args) {
         OrderWaitDBContext odb = new OrderWaitDBContext();
-        for (OrderWait orderWait : odb.getInformationOrderWait()) {
+        for (OrderWait orderWait : odb.getInformationOrderWait(1, 10, true)) {
             System.out.println(orderWait.getOrderWaitID());
         }
     }

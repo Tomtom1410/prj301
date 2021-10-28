@@ -20,7 +20,7 @@ import model.OrderWait;
  *
  * @author Tom
  */
-public class BookingDetail extends HttpServlet {
+public class ChangeInformationOfCustomer extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -34,12 +34,17 @@ public class BookingDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int orderWaitID = Integer.parseInt(request.getParameter("orderWaitID"));
-        
-        
+        int pageSize = 1;
+        String raw_page = request.getParameter("page");
+        if (raw_page == null || raw_page.length() == 0) {
+            raw_page = "1";
+        }
+        int pageIndex = Integer.parseInt(raw_page);
 
+        int orderWaitID = Integer.parseInt(request.getParameter("orderWaitID"));
+        boolean rented = true;
         OrderWaitDBContext odb = new OrderWaitDBContext();
-        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait();
+        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, rented);
         OrderWait o = new OrderWait();
         for (OrderWait od : OrderWait) {
             if (od.getOrderWaitID() == orderWaitID) {
@@ -47,16 +52,29 @@ public class BookingDetail extends HttpServlet {
                 break;
             }
         }
-        
+        int totalRow = odb.totalRow();
+        int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
+        String url = "InformationOfCustomerHadRoom?page=";
+        request.setAttribute("url", url);
+        request.setAttribute("pageIndex", pageIndex);
+        request.setAttribute("totalPage", totalPage);
+
         DepartmentDBContext ddb = new DepartmentDBContext();
-        
-        ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName());
+
+        ArrayList<Department> roomModel = ddb.getRoomModel();
+        request.setAttribute("roomModel", roomModel);
+
+        ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName(), null);
         request.setAttribute("roomByName", roomByName);
         request.setAttribute("o", o);
         request.setAttribute("orders", OrderWait);
         String tag = "order";
         request.setAttribute("tagMenu", tag);
-        request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
+        String title = "hadRoom";
+        request.setAttribute("title", title);
+        response.getWriter().println(url);
+        request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
+
     }
 
     /**
@@ -70,7 +88,6 @@ public class BookingDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
     }
 
     /**

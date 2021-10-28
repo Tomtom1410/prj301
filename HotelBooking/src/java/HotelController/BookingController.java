@@ -77,7 +77,7 @@ public class BookingController extends HttpServlet {
         if (name.equals("") || email.equals("") || phone.equals("") || checkIn.equals("")
                 || checkOut.equals("") || noOfRooms.equals("0")) {
             DepartmentDBContext ddb = new DepartmentDBContext();
-            Department d = ddb.getRoomByName(deptName).get(0);
+            Department d = ddb.getRoomByName(deptName, null).get(0);
             String url_image = d.getUrl().get(0);
             d.getUrl().remove(0);
             request.setAttribute("room", d);
@@ -92,7 +92,7 @@ public class BookingController extends HttpServlet {
         } else if (!Validation.checkName(name) || !Validation.checkEmail(email)
                 || !Validation.checkPhone(phone) || check) {
             DepartmentDBContext ddb = new DepartmentDBContext();
-            Department d = ddb.getRoomByName(deptName).get(0);
+            Department d = ddb.getRoomByName(deptName, null).get(0);
             String url_image = d.getUrl().get(0);
             d.getUrl().remove(0);
             request.setAttribute("room", d);

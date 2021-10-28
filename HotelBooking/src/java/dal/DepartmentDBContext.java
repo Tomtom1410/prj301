@@ -69,7 +69,7 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-    public ArrayList<Department> getRoomByName(String name) {
+    public ArrayList<Department> getRoomByName(String name, Boolean status) {
         ArrayList<Department> deptList = new ArrayList<>();
         try {
             String sql = "select deptID, deptName, [Status], price, Department.roomType,\n"
@@ -77,11 +77,15 @@ public class DepartmentDBContext extends DBContext {
                     + "from Department\n"
                     + "inner join RoomTypeAndUrl\n"
                     + "on Department.roomType = RoomTypeAndUrl.roomType\n"
-                    + "where deptName = ? AND [Status] = 0";
+                    + "where deptName = ? \n";
             stm = connection.prepareStatement(sql);
             stm.setString(1, name);
+            if (status != null) {
+                sql += "AND [Status] = 0";
+//                stm.setBoolean(2, status);
+            }
             rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 Department d = new Department();
                 d.setDeptID(rs.getInt("deptID"));
@@ -97,7 +101,7 @@ public class DepartmentDBContext extends DBContext {
                 d.getUrl().add(url_2);
                 String url_3 = rs.getString("url_3");
                 d.getUrl().add(url_3);
-                
+
                 deptList.add(d);
             }
         } catch (SQLException ex) {
@@ -166,11 +170,11 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-//    public static void main(String[] args) {
-//        DepartmentDBContext db = new DepartmentDBContext();
-//        ArrayList<Department> d = db.searchRoom("SILVER ROOM");
-//        for (Department d1 : d) {
-//            System.out.println(d1.getDeptName());
-//        }
-//    }
+    public static void main(String[] args) {
+        DepartmentDBContext db = new DepartmentDBContext();
+        ArrayList<Department> d = db.getRoomByName("LUXURY DOUBLE ROOM", false);
+        for (Department d1 : d) {
+            System.out.println(d1.getDeptName());
+        }
+    }
 }

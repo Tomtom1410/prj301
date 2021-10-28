@@ -18,8 +18,9 @@ import model.OrderWait;
  *
  * @author Tom
  */
-public class InformationOfCustomer extends HttpServlet {
-     /**
+public class InformationOfCustomerWait extends HttpServlet {
+
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -30,12 +31,30 @@ public class InformationOfCustomer extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int pageSize = 40;
+        String raw_page = request.getParameter("page");
+        if (raw_page == null || raw_page.length() == 0) {
+            raw_page = "1";
+        }
+        int pageIndex = Integer.parseInt(raw_page);
+        boolean rented = false;
         OrderWaitDBContext odb = new OrderWaitDBContext();
-        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait();
+        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, rented);
         request.setAttribute("orders", OrderWait);
         String tag = "order";
         request.setAttribute("tagMenu", tag);
+        
+        String title = "wait";
+        request.setAttribute("title", title);
+        
+        int totalRow = odb.totalRow();
+        int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
+        String url = "InformationOfCustomerWait?page=";
+        request.setAttribute("url", url);
+        request.setAttribute("pageIndex", pageIndex);
+        request.setAttribute("totalPage", totalPage);
         request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

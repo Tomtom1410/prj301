@@ -37,7 +37,7 @@
                                 <c:if test="${ept eq \"eR\"}">
                                     style="background-color: #e9d1d1; color: red; padding: 3%;"
                                 </c:if> href="RoomEmpty">Empty room</a></li>
-                        <li><a href="RoomRented">The room is rented</a></li>
+                        <li><a href="RoomRented">The rooms are rented</a></li>
                     </ul>
 
                     <div class="typeRoom">

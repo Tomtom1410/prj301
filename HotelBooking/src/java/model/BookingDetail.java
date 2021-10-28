@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tom
@@ -7,11 +9,9 @@ package model;
 public class BookingDetail {
 
     private int BookingID;
-    private Customer customer;
+    private OrderWait orderWait;
+    private ArrayList<Department> departments = new ArrayList<>();
     private boolean status;
-
-    public BookingDetail() {
-    }
 
     public int getBookingID() {
         return BookingID;
@@ -21,12 +21,20 @@ public class BookingDetail {
         this.BookingID = BookingID;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public OrderWait getOrderWait() {
+        return orderWait;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setOrderWait(OrderWait orderWait) {
+        this.orderWait = orderWait;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(ArrayList<Department> departments) {
+        this.departments = departments;
     }
 
     public boolean isStatus() {
@@ -36,6 +44,4 @@ public class BookingDetail {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
-    
 }

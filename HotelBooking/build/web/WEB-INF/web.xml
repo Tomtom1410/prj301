@@ -42,11 +42,19 @@
     </servlet>
     <servlet>
         <servlet-name>InformationOfCustomer</servlet-name>
-        <servlet-class>ManagementControl.InformationOfCustomer</servlet-class>
+        <servlet-class>ManagementControl.InformationOfCustomerWait</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>BookingDetail</servlet-name>
-        <servlet-class>ManagementControl.BookingDetail</servlet-class>
+        <servlet-class>ManagementControl.BookingDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InformationOfCustomerHadRoom</servlet-name>
+        <servlet-class>ManagementControl.InformationOfCustomerHadRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeInformationOfCustomer</servlet-name>
+        <servlet-class>ManagementControl.ChangeInformationOfCustomer</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -90,11 +98,19 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InformationOfCustomer</servlet-name>
-        <url-pattern>/Management/InformationOfCustomer</url-pattern>
+        <url-pattern>/Management/InformationOfCustomerWait</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookingDetail</servlet-name>
         <url-pattern>/Management/BookingDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformationOfCustomerHadRoom</servlet-name>
+        <url-pattern>/Management/InformationOfCustomerHadRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeInformationOfCustomer</servlet-name>
+        <url-pattern>/Management/ChangeInformationOfCustomer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

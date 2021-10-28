@@ -31,13 +31,14 @@
                         <div class="Banner">
                             <ul>
                                 <li>
-                                    <a 
-                                    <c:if test="${title eq \"wait\"}">
+                                    <a  href="InformationOfCustomerWait">Orders Wait</a>
+                                </li>
+                                <li><a 
+                                    <c:if test="${title eq \"hadRoom\"}">
                                         style="background-color: #e9d1d1; color: red; padding: 3%;"
-                                    </c:if> href="InformationOfCustomerWait">Orders Wait
-                                </a>
+                                    </c:if>
+                                    href="InformationOfCustomerHadRoom">Orders Have Room</a>
                             </li>
-                            <li><a href="InformationOfCustomerHadRoom">Orders Have Room</a></li>
                         </ul>
                     </div>
                     <div class="content col-md-8">
@@ -61,20 +62,20 @@
                                     <td>${o.checkIn}</td>
                                     <td>${o.checkOut}</td>
                                     <td>${o.isRented()?"Yes":"No"}</td>
-                                    <td><a href="BookingDetail?orderWaitID=${o.orderWaitID}">Details</a></td>
-
+                                    <td><a href="ChangeInformationOfCustomer?orderWaitID=${o.orderWaitID}">Details</a></td>
                                 </tr>
                             </c:forEach>
                         </table>
 
-                        <div id="paggingBottom" class="pageLine" style=" margin: 1%; float: right;"></div>
+                        <div id="paggingBottom" class="pageLine" style=" margin: 1%; float: right;">
+                        </div>
                         <script>
                             generatePagger('paggingBottom',${requestScope.pageIndex},${requestScope.totalPage}, '${requestScope.url}', 2);
                         </script>
                     </div>
                     <c:if test="${o != null}">
                         <div class="detail col-md-4">
-                            <form action="BookingDetail" method="POST">
+                            <form action="ChangeInformationOfCustomer" method="POST">
                                 <c:if test="${flag eq \"false\"}">
                                     <p style="color: red;">Please check the room. The number of rooms is
                                         different from the number of rooms the customer wants!</p>
@@ -82,38 +83,58 @@
                                 <table>
                                     <tr>
                                         <td><input type="hidden" name="oID" value="${o.orderWaitID}"></td>
+                                        <td><input type="hidden" name="customerID" value="${o.customer.customerID}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Name: ${o.customer.customerName}</td>
+                                        <td>Name:</td>
+                                        <td class="up"><input name="customerName" type="text" value="${o.customer.customerName}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Phone: ${o.customer.phone}</td>
+                                        <td>Phone:</td>
+                                        <td class="up"><input name="phone" type="text" value="${o.customer.phone}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Email: ${o.customer.email}</td>
+                                        <td>Email:</td>
+                                        <td class="up"><input name="email" type="text" value="${o.customer.email}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Check-in: ${o.checkIn}</td>
+                                        <td>Check-in:</td>
+                                        <td class="up"><input name="checkIn" type="date" value="${o.checkIn}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Check-out: ${o.checkOut}</td>
+                                        <td>Check-out:</td>
+                                        <td class="up"><input name="checkOut" type="date" value="${o.checkOut}"></td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <input type="hidden" name="roomByName" value="${o.department.deptName}">
-                                            Room type: ${o.department.deptName}
+                                        <td>Room type:</td>
+                                        <td class="up">
+                                            <select name="deptName">
+                                                <c:forEach items="${roomModel}" var="r">
+                                                    <option 
+                                                        ${r.deptName eq o.department.deptName? "selected=\"selected\"" : ""}
+                                                        value="${r.deptName}">${r.deptName}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <input type="hidden" name="noOfRoom" value="${o.noOfRoom}">
-                                            Number of rooms: ${o.noOfRoom}
+                                        <td>Number of rooms:</td>
+                                        <td class="up">
+                                            <select name="noOfRoom">
+                                                <option ${o.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
+                                                <option ${o.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
+                                                <option ${o.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
+                                                <option ${o.noOfRoom == 4 ? "selected=\"selected\"" : ""} value="4">4</option>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Choose room: 
+                                        <td>Choose room: </td>
+                                        <td>
                                             <c:forEach items="${roomByName}" var="r">
                                                 <input name="deptID" type="checkbox" 
+                                                       ${r.deptID}
                                                        value="${r.deptID}"> ${r.deptID}
                                             </c:forEach>
                                         </td>
@@ -122,9 +143,11 @@
                                 <c:if test="${notic}">
                                     <p style="color: red; font-weight: bold">Insert done!</p>
                                 </c:if>
-                                <button class="save" style="margin: 4% 40%;" type="submit">Save</button>
+                                <div class="control">
+                                    <button class="save" name="update" type="submit">Update</button>
+                                    <button class="del" name="delete" type="submit">Delete</button>
+                                </div>
                             </form>
-
                         </div>
                     </c:if>
                 </div>
