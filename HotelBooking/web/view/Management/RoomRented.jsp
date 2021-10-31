@@ -26,9 +26,6 @@
                         <div class="col-md-4">
                             <h3><span class="glyphicon glyphicon-align-justify"></span> Rent - Check out</h3>
                         </div>
-                        <div class="col-md-4">
-                            <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search room">
-                        </div>
                     </div>
 
                     <div class="content">
@@ -64,7 +61,7 @@
                             <p>Double Room</p>
                         </div>
                         <div class="row">
-                            <c:forEach items="${roomEmpty}" var="rN">
+                            <c:forEach items="${roomNotEmpty}" var="rN">
                                 <c:if test="${rN.deptNameContainsKey(\"DOUBLE\")}">
                                     <div class="col-md-2 Room">
                                         <p>Room Number: ${rN.deptID}</p>
@@ -94,6 +91,7 @@
                             </c:forEach>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

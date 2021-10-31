@@ -73,7 +73,7 @@ public class Department {
     }
 
     public boolean deptNameContainsKey(String keys) {
-        if (this.deptName.contains(keys)) {
+        if (this.deptName.toLowerCase().contains(keys.toLowerCase())) {
             return true;
         }
         return false;

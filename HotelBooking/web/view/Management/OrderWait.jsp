@@ -61,7 +61,9 @@
                                     <td>${o.checkIn}</td>
                                     <td>${o.checkOut}</td>
                                     <td>${o.isRented()?"Yes":"No"}</td>
-                                    <td><a href="BookingDetail?orderWaitID=${o.orderWaitID}">Details</a></td>
+                                    <td>
+                                        <a href="BookingDetail?orderWaitID=${o.orderWaitID}&page=${pageIndex}">Details</a>
+                                    </td>
 
                                 </tr>
                             </c:forEach>

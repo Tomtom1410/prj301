@@ -55,9 +55,9 @@ public class BookingDetailController extends HttpServlet {
         }
         String title = "wait";
         request.setAttribute("title", title);
-        int totalRow = odb.totalRow();
+        int totalRow = odb.totalRow(true);
         int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-        String url = "BookingDetail?orderWaitID=" + request.getParameter("orderWaitID") + "&page=";
+        String url = "InformationOfCustomerWait?page=";
         request.setAttribute("urlPage", url);
         request.setAttribute("pageIndex", pageIndex);
         request.setAttribute("totalPage", totalPage);
@@ -108,9 +108,9 @@ public class BookingDetailController extends HttpServlet {
             }
             String title = "wait";
             request.setAttribute("title", title);
-            int totalRow = odb.totalRow();
+            int totalRow = odb.totalRow(true);
             int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-            String url = "BookingDetail?orderWaitID=" + request.getParameter("oID") + "&page=";
+            String url = "InformationOfCustomerWait?page=";
             request.setAttribute("urlPage", url);
             request.setAttribute("pageIndex", pageIndex);
             request.setAttribute("totalPage", totalPage);
@@ -159,9 +159,9 @@ public class BookingDetailController extends HttpServlet {
             }
             String title = "wait";
             request.setAttribute("title", title);
-            int totalRow = odb.totalRow();
+            int totalRow = odb.totalRow(true);
             int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-            String url = "BookingDetail?orderWaitID=" + request.getParameter("oID") + "&page=";
+            String url = "InformationOfCustomerWait?page=";
             request.setAttribute("urlPage", url);
             request.setAttribute("pageIndex", pageIndex);
             request.setAttribute("totalPage", totalPage);

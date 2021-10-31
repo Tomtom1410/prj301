@@ -1,6 +1,5 @@
 package dal;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,7 +82,7 @@ public class OrderWaitDBContext extends DBContext {
     public ArrayList<OrderWait> getInformationOrderWait(int pageIndex, int pageSize, boolean rented) {
         ArrayList<OrderWait> orderWaits = new ArrayList<>();
         try {
-            String sql = " SELECT * \n"
+            String sql = "SELECT * \n"
                     + " FROM  (SELECT ROW_NUMBER() OVER (ORDER BY OrderWaitID asc) as rownum,\n"
                     + "			Customer.CustomerID, CustomerName, Phone, Email, [Address]	\n"
                     + "			,orderWaitID, deptName, CheckIn, CheckOut, noOfRooms,Rented\n"
@@ -157,13 +156,15 @@ public class OrderWaitDBContext extends DBContext {
                     + "      ,[CheckIn] = ?\n"
                     + "      ,[CheckOut] = ?\n"
                     + "      ,[noOfRooms] = ?\n"
+                    + "      ,[Rented] = ?"
                     + " WHERE orderWaitID = ?";
             stm = connection.prepareStatement(sql);
             stm.setString(1, o.getDepartment().getDeptName());
             stm.setDate(2, o.getCheckIn());
             stm.setDate(3, o.getCheckOut());
             stm.setInt(4, o.getNoOfRoom());
-            stm.setInt(5, o.getOrderWaitID());
+            stm.setBoolean(5, true);
+            stm.setInt(6, o.getOrderWaitID());
             stm.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
@@ -182,10 +183,13 @@ public class OrderWaitDBContext extends DBContext {
         }
     }
 
-    public int totalRow() {
+    public int totalRow(boolean rented) {
         try {
-            String sql = "select COUNT(*) as totalRow from OrderWait";
+            String sql = "select COUNT(*) as totalRow \n"
+                    + "from OrderWait\n"
+                    + "where Rented = ?";
             stm = connection.prepareStatement(sql);
+            stm.setBoolean(1, rented);
             rs = stm.executeQuery();
 
             if (rs.next()) {
@@ -196,12 +200,23 @@ public class OrderWaitDBContext extends DBContext {
         }
         return -1;
     }
-    
 
-    public static void main(String[] args) {
-        OrderWaitDBContext odb = new OrderWaitDBContext();
-        for (OrderWait orderWait : odb.getInformationOrderWait(1, 10, true)) {
-            System.out.println(orderWait.getOrderWaitID());
+    public void deleteOrder(String orderID) {
+        try {
+            String sql = "DELETE FROM [OrderWait]\n"
+                    + "      WHERE orderWaitID = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, orderID);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+//    public static void main(String[] args) {
+//        OrderWaitDBContext odb = new OrderWaitDBContext();
+//        for (OrderWait orderWait : odb.getInformationOrderWait(1, 10, true)) {
+//            System.out.println(orderWait.getOrderWaitID());
+//        }
+//    }
 }

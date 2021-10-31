@@ -8,7 +8,6 @@ package HotelController;
 import dal.DepartmentDBContext;
 import dal.OrderWaitDBContext;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -38,13 +37,14 @@ public class BookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-
-        ArrayList<Department> depts = ddb.getRoomModel();
-        request.setAttribute("depts", depts);
-        String tag = "room";
-        request.setAttribute("tag", tag);
-        request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
+//        DepartmentDBContext ddb = new DepartmentDBContext();
+//
+//        ArrayList<Department> depts = ddb.getRoomModel();
+//        request.setAttribute("depts", depts);
+//        String tag = "room";
+//        request.setAttribute("tag", tag);
+//        request.getRequestDispatcher("view/Hotel/Room.jsp").forward(request, response);
+        response.sendRedirect("Room");
     }
 
     /**

@@ -21,10 +21,10 @@
                     </c:if>
                     href="InformationOfCustomerWait"><span class="glyphicon glyphicon-user"></span> Information Of Customer</a></li>
             <li><a
-                    <c:if test="${tagMenu eq \"xxx\"}">
+                    <c:if test="${tagMenu eq \"history\"}">
                         style="background-color: gray; color: white;padding: 3%;"
                     </c:if>
-                    href="#"><span class="glyphicon glyphicon-play-circle"></span> Booking History</a></li>
+                    href="BookingHistory"><span class="glyphicon glyphicon-play-circle"></span> Booking History</a></li>
             <li><a href="../login"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
         </ul>
     </div>

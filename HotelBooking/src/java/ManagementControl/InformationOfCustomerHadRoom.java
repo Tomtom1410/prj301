@@ -5,14 +5,14 @@
  */
 package ManagementControl;
 
-import dal.OrderWaitDBContext;
+import dal.BookingDBContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.OrderWait;
+import model.BookingDetail;
 
 /**
  *
@@ -31,23 +31,23 @@ public class InformationOfCustomerHadRoom extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 1;
+        int pageSize = 40;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
         }
         int pageIndex = Integer.parseInt(raw_page);
-        boolean rented = true;
-        OrderWaitDBContext odb = new OrderWaitDBContext();
-        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, rented);
-        request.setAttribute("orders", OrderWait);
         String tag = "order";
         request.setAttribute("tagMenu", tag);
 
         String title = "hadRoom";
         request.setAttribute("title", title);
 
-        int totalRow = odb.totalRow();
+        BookingDBContext bdb = new BookingDBContext();
+        ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
+        request.setAttribute("allBookingNotCancel", allBookingDetails);
+
+        int totalRow = bdb.totalRowBookingDetail("false");
         int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
         String url = "InformationOfCustomerHadRoom?page=";
         request.setAttribute("url", url);

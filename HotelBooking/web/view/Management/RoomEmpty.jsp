@@ -26,9 +26,6 @@
                         <div class="col-md-4">
                             <h3><span class="glyphicon glyphicon-align-justify"></span> Rent - Check out</h3>
                         </div>
-                        <div class="col-md-4">
-                            <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search room">
-                        </div>
                     </div>
 
                     <div class="content">

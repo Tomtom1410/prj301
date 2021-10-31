@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dal;
 
 import java.sql.PreparedStatement;
@@ -168,13 +164,5 @@ public class DepartmentDBContext extends DBContext {
             Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return depts;
-    }
-
-    public static void main(String[] args) {
-        DepartmentDBContext db = new DepartmentDBContext();
-        ArrayList<Department> d = db.getRoomByName("LUXURY DOUBLE ROOM", false);
-        for (Department d1 : d) {
-            System.out.println(d1.getDeptName());
-        }
     }
 }

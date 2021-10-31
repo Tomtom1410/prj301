@@ -53,16 +53,18 @@
                                 <td>Rented</td>
                                 <td>Details</td>
                             </tr>
-                            <c:forEach items="${orders}" var="o">
+                            <c:forEach items="${allBookingNotCancel}" var="b">
                                 <tr>
-                                    <td>${o.customer.customerName}</td>
-                                    <td>${o.customer.phone}</td>
-                                    <td>${o.noOfRoom}</td>
-                                    <td>${o.department.deptName}</td>
-                                    <td>${o.checkIn}</td>
-                                    <td>${o.checkOut}</td>
-                                    <td>${o.isRented()?"Yes":"No"}</td>
-                                    <td><a href="ChangeInformationOfCustomer?orderWaitID=${o.orderWaitID}">Details</a></td>
+                                    <td>${b.orderWait.customer.customerName}</td>
+                                    <td>${b.orderWait.customer.phone}</td>
+                                    <td>${b.orderWait.noOfRoom}</td>
+                                    <td>${b.orderWait.department.deptName}</td>
+                                    <td>${b.orderWait.checkIn}</td>
+                                    <td>${b.orderWait.checkOut}</td>
+                                    <td>${b.orderWait.isRented()?"Yes":"No"}</td>
+                                    <td>
+                                        <a href="ChangeInformationOfCustomer?orderWaitID=${b.orderWait.orderWaitID}&page=${pageIndex}">Details</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </table>
@@ -73,7 +75,7 @@
                             generatePagger('paggingBottom',${requestScope.pageIndex},${requestScope.totalPage}, '${requestScope.url}', 2);
                         </script>
                     </div>
-                    <c:if test="${o != null}">
+                    <c:if test="${bookingDetail != null}">
                         <div class="detail col-md-4">
                             <form action="ChangeInformationOfCustomer" method="POST">
                                 <c:if test="${flag eq \"false\"}">
@@ -82,28 +84,32 @@
                                     </c:if>
                                 <table>
                                     <tr>
-                                        <td><input type="hidden" name="oID" value="${o.orderWaitID}"></td>
-                                        <td><input type="hidden" name="customerID" value="${o.customer.customerID}"></td>
+                                        <td><input type="hidden" name="oID" value="${bookingDetail.orderWait.orderWaitID}"></td>
+                                        <td><input type="hidden" name="customerID" value="${bookingDetail.orderWait.customer.customerID}"></td>
                                     </tr>
                                     <tr>
                                         <td>Name:</td>
-                                        <td class="up"><input name="customerName" type="text" value="${o.customer.customerName}"></td>
+                                        <td class="up"><input name="customerName" type="text" value="${bookingDetail.orderWait.customer.customerName}"></td>
                                     </tr>
                                     <tr>
                                         <td>Phone:</td>
-                                        <td class="up"><input name="phone" type="text" value="${o.customer.phone}"></td>
+                                        <td class="up"><input name="phone" type="text" value="${bookingDetail.orderWait.customer.phone}"></td>
+                                    </tr>
+                                     <tr>
+                                        <td>Address</td>
+                                        <td class="up"><input name="address" type="text" value="${bookingDetail.orderWait.customer.address}"></td>
                                     </tr>
                                     <tr>
                                         <td>Email:</td>
-                                        <td class="up"><input name="email" type="text" value="${o.customer.email}"></td>
+                                        <td class="up"><input name="email" type="text" value="${bookingDetail.orderWait.customer.email}"></td>
                                     </tr>
                                     <tr>
                                         <td>Check-in:</td>
-                                        <td class="up"><input name="checkIn" type="date" value="${o.checkIn}"></td>
+                                        <td class="up"><input name="checkIn" type="date" value="${bookingDetail.orderWait.checkIn}"></td>
                                     </tr>
                                     <tr>
                                         <td>Check-out:</td>
-                                        <td class="up"><input name="checkOut" type="date" value="${o.checkOut}"></td>
+                                        <td class="up"><input name="checkOut" type="date" value="${bookingDetail.orderWait.checkOut}"></td>
                                     </tr>
                                     <tr>
                                         <td>Room type:</td>
@@ -111,7 +117,7 @@
                                             <select name="deptName">
                                                 <c:forEach items="${roomModel}" var="r">
                                                     <option 
-                                                        ${r.deptName eq o.department.deptName? "selected=\"selected\"" : ""}
+                                                        ${r.deptName eq bookingDetail.orderWait.department.deptName? "selected=\"selected\"" : ""}
                                                         value="${r.deptName}">${r.deptName}
                                                     </option>
                                                 </c:forEach>
@@ -122,10 +128,10 @@
                                         <td>Number of rooms:</td>
                                         <td class="up">
                                             <select name="noOfRoom">
-                                                <option ${o.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
-                                                <option ${o.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
-                                                <option ${o.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
-                                                <option ${o.noOfRoom == 4 ? "selected=\"selected\"" : ""} value="4">4</option>
+                                                <option ${bookingDetail.orderWait.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
+                                                <option ${bookingDetail.orderWait.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
+                                                <option ${bookingDetail.orderWait.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
+                                                <option ${bookingDetail.orderWait.noOfRoom == 4 ? "selected=\"selected\"" : ""} value="4">4</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -134,18 +140,20 @@
                                         <td>
                                             <c:forEach items="${roomByName}" var="r">
                                                 <input name="deptID" type="checkbox" 
-                                                       ${r.deptID}
+                                                       <c:forEach items="${bookingDetail.departments}" var="bd">
+                                                           ${(bd.deptID eq r.deptID) ? "checked=\"checked\"" : ""}
+                                                       </c:forEach>
                                                        value="${r.deptID}"> ${r.deptID}
                                             </c:forEach>
                                         </td>
                                     </tr>
                                 </table>
                                 <c:if test="${notic}">
-                                    <p style="color: red; font-weight: bold">Insert done!</p>
+                                    <p style="color: red; font-weight: bold">Change information done!</p>
                                 </c:if>
                                 <div class="control">
-                                    <button class="save" name="update" type="submit">Update</button>
-                                    <button class="del" name="delete" type="submit">Delete</button>
+                                    <button class="save" name="button" value="update" type="submit">Update</button>
+                                    <button class="del" name="button" value="delete" type="submit">Cancel</button>
                                 </div>
                             </form>
                         </div>

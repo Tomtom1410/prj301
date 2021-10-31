@@ -5,7 +5,7 @@ package model;
  * @author Tom
  */
 public class Invoice {
-    private BookingDetail bookingDetail;
+//    private BookingDetail bookingDetail;
     private Customer customer;
     private int invoiceID;
     private double totalPrice;
@@ -13,13 +13,13 @@ public class Invoice {
     public Invoice() {
     }
 
-    public BookingDetail getBookingDetail() {
-        return bookingDetail;
-    }
-
-    public void setBookingDetail(BookingDetail bookingDetail) {
-        this.bookingDetail = bookingDetail;
-    }
+//    public BookingDetail getBookingDetail() {
+//        return bookingDetail;
+//    }
+//
+//    public void setBookingDetail(BookingDetail bookingDetail) {
+//        this.bookingDetail = bookingDetail;
+//    }
 
     public Customer getCustomer() {
         return customer;
@@ -44,6 +44,4 @@ public class Invoice {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
-    
-    
 }

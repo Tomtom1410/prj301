@@ -5,14 +5,18 @@
  */
 package ManagementControl;
 
+import dal.BookingDBContext;
 import dal.DepartmentDBContext;
 import dal.OrderWaitDBContext;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.BookingDetail;
+import model.Customer;
 import model.Department;
 import model.OrderWait;
 
@@ -34,7 +38,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 1;
+        int pageSize = 40;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
@@ -42,17 +46,14 @@ public class ChangeInformationOfCustomer extends HttpServlet {
         int pageIndex = Integer.parseInt(raw_page);
 
         int orderWaitID = Integer.parseInt(request.getParameter("orderWaitID"));
-        boolean rented = true;
-        OrderWaitDBContext odb = new OrderWaitDBContext();
-        ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, rented);
-        OrderWait o = new OrderWait();
-        for (OrderWait od : OrderWait) {
-            if (od.getOrderWaitID() == orderWaitID) {
-                o = od;
-                break;
-            }
-        }
-        int totalRow = odb.totalRow();
+
+        BookingDBContext bdb = new BookingDBContext();
+        ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
+        request.setAttribute("allBookingNotCancel", allBookingDetails);
+        BookingDetail b = bdb.getBookingDetail(orderWaitID);
+        request.setAttribute("bookingDetail", b);
+
+        int totalRow = bdb.totalRowBookingDetail("false");
         int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
         String url = "InformationOfCustomerHadRoom?page=";
         request.setAttribute("url", url);
@@ -63,16 +64,12 @@ public class ChangeInformationOfCustomer extends HttpServlet {
 
         ArrayList<Department> roomModel = ddb.getRoomModel();
         request.setAttribute("roomModel", roomModel);
-
-        ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName(), null);
+        ArrayList<Department> roomByName = ddb.getRoomByName(b.getOrderWait().getDepartment().getDeptName(), null);
         request.setAttribute("roomByName", roomByName);
-        request.setAttribute("o", o);
-        request.setAttribute("orders", OrderWait);
         String tag = "order";
         request.setAttribute("tagMenu", tag);
         String title = "hadRoom";
         request.setAttribute("title", title);
-        response.getWriter().println(url);
         request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
 
     }
@@ -88,6 +85,122 @@ public class ChangeInformationOfCustomer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String buttonValue = request.getParameter("button");
+        OrderWaitDBContext odb = new OrderWaitDBContext();
+        BookingDBContext bdb = new BookingDBContext();
+        if (buttonValue.equals("delete")) {
+            bdb.cancelBookingDetail(request.getParameter("oID"));
+        } else {
+            //get orderWait
+            OrderWait o = new OrderWait();
+            o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
+            o.setNoOfRoom(Integer.parseInt(request.getParameter("noOfRoom")));
+            o.setCheckIn(Date.valueOf(request.getParameter("checkIn")));
+            o.setCheckOut(Date.valueOf(request.getParameter("checkOut")));
+            Department d = new Department();
+            d.setDeptName(request.getParameter("deptName"));
+            o.setDepartment(d);
+            // get customer
+            Customer c = new Customer();
+            c.setCustomerID(Integer.parseInt(request.getParameter("customerID")));
+            c.setAddress(request.getParameter("address"));
+            c.setCustomerName(request.getParameter("customerName"));
+            c.setPhone(request.getParameter("phone"));
+            c.setEmail(request.getParameter("email"));
+            o.setCustomer(c);
+
+            String[] roomIDs = request.getParameterValues("deptID");
+
+            if (roomIDs == null || roomIDs.length != o.getNoOfRoom()) {
+                int pageSize = 40;
+                String raw_page = request.getParameter("page");
+                if (raw_page == null || raw_page.length() == 0) {
+                    raw_page = "1";
+                }
+                int pageIndex = Integer.parseInt(raw_page);
+
+                ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
+                request.setAttribute("allBookingNotCancel", allBookingDetails);
+                BookingDetail b = bdb.getBookingDetail(o.getOrderWaitID());
+                request.setAttribute("bookingDetail", b);
+
+                int totalRow = bdb.totalRowBookingDetail("false");
+                int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
+                String url = "InformationOfCustomerHadRoom?page=";
+                request.setAttribute("url", url);
+                request.setAttribute("pageIndex", pageIndex);
+                request.setAttribute("totalPage", totalPage);
+
+                DepartmentDBContext ddb = new DepartmentDBContext();
+                ArrayList<Department> roomModel = ddb.getRoomModel();
+                request.setAttribute("roomModel", roomModel);
+                ArrayList<Department> roomByName = ddb.getRoomByName(b.getOrderWait().getDepartment().getDeptName(), null);
+                request.setAttribute("roomByName", roomByName);
+                // set tag and tagMenu
+                String tag = "order";
+                request.setAttribute("tagMenu", tag);
+                boolean flag = false;
+                request.setAttribute("flag", flag);
+                String title = "hadRoom";
+                request.setAttribute("title", title);
+                response.getWriter().println(url);
+                request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
+            } else {
+                // update bookingDetail
+                ArrayList<Department> rooms = new ArrayList<>();
+                for (String roomID : roomIDs) {
+                    Department r = new Department();
+                    r.setDeptID(Integer.parseInt(roomID));
+                    rooms.add(r);
+                }
+
+                BookingDetail b = new BookingDetail();
+                b.setDepartments(rooms);
+                b.setOrderWait(o);
+                bdb.updateInforBooking(b);
+            }
+        }
+
+        // forward jsp and notification done
+        if (request.getParameter("oID").length() == 0) {
+            response.sendRedirect("InformationOfCustomerHadRoom");
+        } else {
+            int pageSize = 40;
+            String raw_page = request.getParameter("page");
+            if (raw_page == null || raw_page.length() == 0) {
+                raw_page = "1";
+            }
+            int pageIndex = Integer.parseInt(raw_page);
+
+            ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
+            request.setAttribute("allBookingNotCancel", allBookingDetails);
+
+            OrderWait o = new OrderWait();
+            o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
+            BookingDetail bo = bdb.getBookingDetail(o.getOrderWaitID());
+            request.setAttribute("bookingDetail", bo);
+
+            int totalRow = bdb.totalRowBookingDetail("false");
+            int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
+            String url = "InformationOfCustomerHadRoom?page=";
+            request.setAttribute("url", url);
+            request.setAttribute("pageIndex", pageIndex);
+            request.setAttribute("totalPage", totalPage);
+
+            DepartmentDBContext ddb = new DepartmentDBContext();
+
+            ArrayList<Department> roomModel = ddb.getRoomModel();
+            request.setAttribute("roomModel", roomModel);
+            ArrayList<Department> roomByName = ddb.getRoomByName(bo.getOrderWait().getDepartment().getDeptName(), null);
+            request.setAttribute("roomByName", roomByName);
+            String tag = "order";
+            request.setAttribute("tagMenu", tag);
+            boolean notic = true;
+            request.setAttribute("notic", notic);
+            String title = "hadRoom";
+            request.setAttribute("title", title);
+            request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
+        }
     }
 
     /**

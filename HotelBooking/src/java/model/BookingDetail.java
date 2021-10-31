@@ -11,7 +11,7 @@ public class BookingDetail {
     private int BookingID;
     private OrderWait orderWait;
     private ArrayList<Department> departments = new ArrayList<>();
-    private boolean status;
+    private boolean cancel;
 
     public int getBookingID() {
         return BookingID;
@@ -37,11 +37,12 @@ public class BookingDetail {
         this.departments = departments;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isCancel() {
+        return cancel;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setCancel(boolean cancel) {
+        this.cancel = cancel;
     }
+
 }

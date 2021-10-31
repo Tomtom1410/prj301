@@ -47,7 +47,7 @@ public class InformationOfCustomerWait extends HttpServlet {
         String title = "wait";
         request.setAttribute("title", title);
         
-        int totalRow = odb.totalRow();
+        int totalRow = odb.totalRow(false);
         int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
         String url = "InformationOfCustomerWait?page=";
         request.setAttribute("url", url);

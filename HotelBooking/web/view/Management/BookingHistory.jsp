@@ -11,7 +11,7 @@
         <script src="${pageContext.request.contextPath}/JavaScript/ManagementCode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/OrderWaitStyle.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/BookingHistoryStyle.css" rel="stylesheet" type="text/css" />
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/MenuStyle.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
@@ -21,7 +21,7 @@
                 <div class="col-md-10 right">
                     <div class="row title">
                         <div class="col-md-4">
-                            <h3><span class="glyphicon glyphicon-align-justify"></span>Information Of Customer</h3>
+                            <h3><span class="glyphicon glyphicon-align-justify"></span> Booking History</h3>
                         </div>
                         <div class="col-md-4 Search">
                             <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search">
@@ -29,17 +29,25 @@
                     </div>
                     <div class="row information">
                         <div class="Banner">
-                            <ul>
-                                <li>
-                                    <a  href="InformationOfCustomerWait">Orders Wait</a>
-                                </li>
-                                <li><a 
-                                    <c:if test="${title eq \"hadRoom\"}">
-                                        style="background-color: #e9d1d1; color: red; padding: 3%;"
+                            <form action="BookingHistory" method="POST">
+                                <span>Display: </span>
+                                <select name="sort">
+                                    <option value="all">All</option>
+                                    <option
+                                        <c:if test="${tag eq \"notCancel\"}">
+                                            selected="selected"
+                                        </c:if>
+                                        value="notCancel">Not Cancel Room
+                                    </option>
+                                <option 
+                                    <c:if test="${tag eq \"cancel\"}">
+                                        selected="selected"
                                     </c:if>
-                                    href="InformationOfCustomerHadRoom">Orders Have Room</a>
-                            </li>
-                        </ul>
+                                    value="cancel">Cancel Room
+                                </option>
+                            </select>
+                            <button type="submit">Submit</button>
+                        </form>
                     </div>
                     <div class="content col-md-8">
                         <table>
@@ -50,10 +58,10 @@
                                 <td>Room Type</td>
                                 <td>Check-in</td>
                                 <td>Check-out</td>
-                                <td>Rented</td>
+                                <td>Cancel room</td>
                                 <td>Details</td>
                             </tr>
-                            <c:forEach items="${allBookingNotCancel}" var="b">
+                            <c:forEach items="${bookingHistory}" var="b">
                                 <tr>
                                     <td>${b.orderWait.customer.customerName}</td>
                                     <td>${b.orderWait.customer.phone}</td>
@@ -61,7 +69,7 @@
                                     <td>${b.orderWait.department.deptName}</td>
                                     <td>${b.orderWait.checkIn}</td>
                                     <td>${b.orderWait.checkOut}</td>
-                                    <td>${b.orderWait.isRented()?"Yes":"No"}</td>
+                                    <td>${b.isCancel()?"Yes":"No"}</td>
                                     <td>
                                         <a href="ChangeInformationOfCustomer?orderWaitID=${b.orderWait.orderWaitID}&page=${pageIndex}">Details</a>
                                     </td>
@@ -95,7 +103,7 @@
                                         <td>Phone:</td>
                                         <td class="up"><input name="phone" type="text" value="${bookingDetail.orderWait.customer.phone}"></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
                                         <td>Address</td>
                                         <td class="up"><input name="address" type="text" value="${bookingDetail.orderWait.customer.address}"></td>
                                     </tr>
