@@ -32,7 +32,8 @@ public class BookingHistory extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 40;
+        
+        int pageSize = 20;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
@@ -67,33 +68,18 @@ public class BookingHistory extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String value = request.getParameter("sort");
+        response.getWriter().print(value);
         BookingDBContext bdb = new BookingDBContext();
-        if (value.endsWith("all")) {
+        if (value.equals("all")) {
             response.sendRedirect("BookingHistory");
         } else {
-            int pageSize = 40;
-            String raw_page = request.getParameter("page");
-            if (raw_page == null || raw_page.length() == 0) {
-                raw_page = "1";
-            }
-            int pageIndex = Integer.parseInt(raw_page);
-            int totalRow = 0;
             if (value.equals("cancel")) {
-                ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "true");
+                ArrayList<BookingDetail> allBookingDetails = bdb.getBookingWithOutPage("true");
                 request.setAttribute("bookingHistory", allBookingDetails);
-                totalRow = bdb.totalRowBookingDetail("true");
             } else if (value.equals("notCancel")) {
-                ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
+                ArrayList<BookingDetail> allBookingDetails = bdb.getBookingWithOutPage("false");
                 request.setAttribute("bookingHistory", allBookingDetails);
-                totalRow = bdb.totalRowBookingDetail("false");
             }
-            
-            int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-            request.setAttribute("pageIndex", pageIndex);
-            request.setAttribute("totalPage", totalPage);
-            String url = "BookingHistory?page=";
-            request.setAttribute("url", url);
-
             String tagMenu = "history";
             request.setAttribute("tagMenu", tagMenu);
             request.setAttribute("tag", value);

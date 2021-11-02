@@ -34,11 +34,11 @@
                                 <select name="sort">
                                     <option value="all">All</option>
                                     <option
-                                        <c:if test="${tag eq \"notCancel\"}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="notCancel">Not Cancel Room
-                                    </option>
+                                    <c:if test="${tag eq \"notCancel\"}">
+                                        selected="selected"
+                                    </c:if>
+                                    value="notCancel">Not Cancel Room
+                                </option>
                                 <option 
                                     <c:if test="${tag eq \"cancel\"}">
                                         selected="selected"
@@ -71,7 +71,7 @@
                                     <td>${b.orderWait.checkOut}</td>
                                     <td>${b.isCancel()?"Yes":"No"}</td>
                                     <td>
-                                        <a href="ChangeInformationOfCustomer?orderWaitID=${b.orderWait.orderWaitID}&page=${pageIndex}">Details</a>
+                                        <a href="BookingHistoryDetail?orderWaitID=${b.orderWait.orderWaitID}">Details</a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -85,85 +85,51 @@
                     </div>
                     <c:if test="${bookingDetail != null}">
                         <div class="detail col-md-4">
-                            <form action="ChangeInformationOfCustomer" method="POST">
-                                <c:if test="${flag eq \"false\"}">
-                                    <p style="color: red;">Please check the room. The number of rooms is
-                                        different from the number of rooms the customer wants!</p>
-                                    </c:if>
-                                <table>
+                            <table>
+                                <tr>
+                                    <td>Name: ${bookingDetail.orderWait.customer.customerName}</td>
+                                </tr>
+                                <tr>
+                                    <td>Phone: ${bookingDetail.orderWait.customer.phone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Address: ${bookingDetail.orderWait.customer.address}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email: ${bookingDetail.orderWait.customer.email}</td>
+                                </tr>
+                                <tr>
+                                    <td>Check-in: ${bookingDetail.orderWait.checkIn}</td>
+                                </tr>
+                                <tr>
+                                    <td>Check-out: ${bookingDetail.orderWait.checkOut}</td>
+                                </tr>
+                                <tr>
+                                    <td>Room type: ${bookingDetail.orderWait.department.deptName}</td>
+                                </tr>
+
+                                <c:if test="${bookingDetail.isCancel()}">
                                     <tr>
-                                        <td><input type="hidden" name="oID" value="${bookingDetail.orderWait.orderWaitID}"></td>
-                                        <td><input type="hidden" name="customerID" value="${bookingDetail.orderWait.customer.customerID}"></td>
+                                        <td style="color: red;">Customer has canceled the room</td>
+                                    </tr>
+                                </c:if>
+                                <c:if test="${!bookingDetail.isCancel()}">
+                                    <tr>
+                                        <td>Number of rooms: ${bookingDetail.orderWait.noOfRoom}</td>
                                     </tr>
                                     <tr>
-                                        <td>Name:</td>
-                                        <td class="up"><input name="customerName" type="text" value="${bookingDetail.orderWait.customer.customerName}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Phone:</td>
-                                        <td class="up"><input name="phone" type="text" value="${bookingDetail.orderWait.customer.phone}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Address</td>
-                                        <td class="up"><input name="address" type="text" value="${bookingDetail.orderWait.customer.address}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Email:</td>
-                                        <td class="up"><input name="email" type="text" value="${bookingDetail.orderWait.customer.email}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Check-in:</td>
-                                        <td class="up"><input name="checkIn" type="date" value="${bookingDetail.orderWait.checkIn}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Check-out:</td>
-                                        <td class="up"><input name="checkOut" type="date" value="${bookingDetail.orderWait.checkOut}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Room type:</td>
-                                        <td class="up">
-                                            <select name="deptName">
-                                                <c:forEach items="${roomModel}" var="r">
-                                                    <option 
-                                                        ${r.deptName eq bookingDetail.orderWait.department.deptName? "selected=\"selected\"" : ""}
-                                                        value="${r.deptName}">${r.deptName}
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Number of rooms:</td>
-                                        <td class="up">
-                                            <select name="noOfRoom">
-                                                <option ${bookingDetail.orderWait.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
-                                                <option ${bookingDetail.orderWait.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
-                                                <option ${bookingDetail.orderWait.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
-                                                <option ${bookingDetail.orderWait.noOfRoom == 4 ? "selected=\"selected\"" : ""} value="4">4</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Choose room: </td>
-                                        <td>
-                                            <c:forEach items="${roomByName}" var="r">
-                                                <input name="deptID" type="checkbox" 
-                                                       <c:forEach items="${bookingDetail.departments}" var="bd">
-                                                           ${(bd.deptID eq r.deptID) ? "checked=\"checked\"" : ""}
-                                                       </c:forEach>
-                                                       value="${r.deptID}"> ${r.deptID}
+                                        <td>List rooms: 
+                                            <c:forEach items="${bookingDetail.departments}" var="bd">
+                                                <span>${bd.deptID} </span>
                                             </c:forEach>
                                         </td>
                                     </tr>
-                                </table>
-                                <c:if test="${notic}">
-                                    <p style="color: red; font-weight: bold">Change information done!</p>
+                                    <tr>
+                                        <td>Amount to be paid: ${invoice.totalPrice}$</td>
+                                    </tr>
                                 </c:if>
-                                <div class="control">
-                                    <button class="save" name="button" value="update" type="submit">Update</button>
-                                    <button class="del" name="button" value="delete" type="submit">Cancel</button>
-                                </div>
-                            </form>
+
+                            </table>
                         </div>
                     </c:if>
                 </div>

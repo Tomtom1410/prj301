@@ -124,7 +124,10 @@
                                 <c:if test="${notic}">
                                     <p style="color: red; font-weight: bold">Insert done!</p>
                                 </c:if>
-                                <button class="save" style="margin: 4% 40%;" type="submit">Save</button>
+                               <div class="control">
+                                    <button class="save" name="button" value="update" type="submit">Update</button>
+                                    <button class="del" name="button" value="delete" type="submit">Cancel</button>
+                                </div>
                             </form>
 
                         </div>

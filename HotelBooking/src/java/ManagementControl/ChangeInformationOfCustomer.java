@@ -7,7 +7,6 @@ package ManagementControl;
 
 import dal.BookingDBContext;
 import dal.DepartmentDBContext;
-import dal.OrderWaitDBContext;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 40;
+        int pageSize = 20;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
@@ -86,10 +85,15 @@ public class ChangeInformationOfCustomer extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String buttonValue = request.getParameter("button");
-        OrderWaitDBContext odb = new OrderWaitDBContext();
         BookingDBContext bdb = new BookingDBContext();
         if (buttonValue.equals("delete")) {
-            bdb.cancelBookingDetail(request.getParameter("oID"));
+            OrderWait o = new OrderWait();
+            o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
+            Customer c = new Customer();
+            c.setCustomerID(Integer.parseInt(request.getParameter("customerID")));
+            o.setCustomer(c);
+            bdb.cancelBookingDetail(o);
+
         } else {
             //get orderWait
             OrderWait o = new OrderWait();
@@ -99,6 +103,8 @@ public class ChangeInformationOfCustomer extends HttpServlet {
             o.setCheckOut(Date.valueOf(request.getParameter("checkOut")));
             Department d = new Department();
             d.setDeptName(request.getParameter("deptName"));
+//            String deptName = (String)request.getAttribute("deptName");
+//            d.setDeptName(deptName);
             o.setDepartment(d);
             // get customer
             Customer c = new Customer();
@@ -112,7 +118,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
             String[] roomIDs = request.getParameterValues("deptID");
 
             if (roomIDs == null || roomIDs.length != o.getNoOfRoom()) {
-                int pageSize = 40;
+                int pageSize = 20;
                 String raw_page = request.getParameter("page");
                 if (raw_page == null || raw_page.length() == 0) {
                     raw_page = "1";
@@ -165,7 +171,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
         if (request.getParameter("oID").length() == 0) {
             response.sendRedirect("InformationOfCustomerHadRoom");
         } else {
-            int pageSize = 40;
+            int pageSize = 20;
             String raw_page = request.getParameter("page");
             if (raw_page == null || raw_page.length() == 0) {
                 raw_page = "1";

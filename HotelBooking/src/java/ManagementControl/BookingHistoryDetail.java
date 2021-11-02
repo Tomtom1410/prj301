@@ -6,6 +6,7 @@
 package ManagementControl;
 
 import dal.BookingDBContext;
+import dal.InvoiceDBContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -13,12 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.BookingDetail;
+import model.Invoice;
 
 /**
  *
  * @author Tom
  */
-public class InformationOfCustomerHadRoom extends HttpServlet {
+public class BookingHistoryDetail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,29 +33,33 @@ public class InformationOfCustomerHadRoom extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 20;
+       int pageSize = 20;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
         }
         int pageIndex = Integer.parseInt(raw_page);
-        String tag = "order";
-        request.setAttribute("tagMenu", tag);
-
-        String title = "hadRoom";
-        request.setAttribute("title", title);
-
         BookingDBContext bdb = new BookingDBContext();
-        ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
-        request.setAttribute("allBookingNotCancel", allBookingDetails);
+        ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "null");
+        request.setAttribute("bookingHistory", allBookingDetails);
 
-        int totalRow = bdb.totalRowBookingDetail("false");
+        int totalRow = bdb.totalRowBookingDetail("null");
         int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-        String url = "InformationOfCustomerHadRoom?page=";
-        request.setAttribute("url", url);
         request.setAttribute("pageIndex", pageIndex);
         request.setAttribute("totalPage", totalPage);
-        request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
+        String url = "BookingHistory?page=";
+        request.setAttribute("url", url);
+
+        String tagMenu = "history";
+        request.setAttribute("tagMenu", tagMenu);
+        BookingDetail b = bdb.getBookingDetail(Integer.parseInt(request.getParameter("orderWaitID")));
+        request.setAttribute("bookingDetail", b);
+        request.setAttribute("tagMenu", tagMenu);
+        
+        InvoiceDBContext idb = new InvoiceDBContext();
+        Invoice invoice = idb.getInvoiceByCustomer(b.getOrderWait().getCustomer().getCustomerID());
+        request.setAttribute("invoice", invoice);
+        request.getRequestDispatcher("../view/Management/BookingHistory.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -15,6 +15,8 @@
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/ContactStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
+        <!--java Script-->
+        <script src="${pageContext.request.contextPath}/JavaScript/HotelCode.js"></script>
 
     </head>
 
@@ -29,27 +31,36 @@
                 <!-- Contact -->
                 <div class="row Contact">
                     <div class="col-md-8">
-                        <form action="">
+                        <form action="Contact" method="POST" id="customerFeedBack">
                             <h2>Comment Or Complaints To Us</h2>
                             <table>
                                 <tr>
-                                    <td><input type="text" placeholder="Fullname"></td>
+                                    <td>Note: * is required</td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" placeholder="Email"></td>
+                                    <td><input name ="name" id="name" type="text" placeholder="Fullname"
+                                               pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$" 
+                                               title="Fullname cannot contain special characters!" required> *</td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" placeholder="Number phone"></td>
+                                    <td><input name="email" id ="email" type="text" placeholder="Email"
+                                               pattern="^[a-z0-9A-Z]+@[a-zA-Z]+(\\.[a-zA-Z]+){1,3}+$" 
+                                               title="Email in the form 'user@domain.com'" required> *</td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" placeholder="Address"></td>
+                                    <td><input name="phone" 
+                                               pattern="^[0-9]{9,20}$" title="Phone number must be number"
+                                               id="phone" type="text" placeholder="Number phone" required> *</td>
                                 </tr>
                                 <tr>
-                                    <td><textarea cols="55" rows="8" placeholder="Comment"></textarea></td>
+                                    <td><input name="address" id="address" type="text" placeholder="Address" required> *</td>
+                                </tr>
+                                <tr>
+                                    <td><textarea name="feedback" id="feedback" cols="55" rows="8" placeholder="Comment" required></textarea> *</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="submit" value="Send">
+                                        <input type="submit" onclick="submitForm()" value="Send">
                                     </td>
                                 </tr>
                             </table>
@@ -59,7 +70,7 @@
                     <div class="col-md-4">
                         <h1>Contact Information </h1>
                         <h3>DEL LUNA HOTEL</h3>
-                        <p><span class="glyphicon glyphicon-earphone"></span> Phone : 09xxxxxxxx</p>
+                        <p><span class="glyphicon glyphicon-earphone"></span> Phone : 0981235670</p>
                         <p> <span class="glyphicon glyphicon-equalizer"></span> Address : 50-82 Bui Vien Street, <br> Pham Ngu Lao Ward, District 1, Ho Chi Minh City Copyright. <br> All rights Reserved.
                         </p>
                         <p><span class="glyphicon glyphicon-envelope"></span> Email: Delluna@gamil.com</p>

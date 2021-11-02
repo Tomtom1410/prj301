@@ -60,6 +60,14 @@
         <servlet-name>BookingHistory</servlet-name>
         <servlet-class>ManagementControl.BookingHistory</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BookingHistoryDetail</servlet-name>
+        <servlet-class>ManagementControl.BookingHistoryDetail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetRoomByDeptName</servlet-name>
+        <servlet-class>ManagementControl.GetRoomByDeptName</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -119,6 +127,14 @@
     <servlet-mapping>
         <servlet-name>BookingHistory</servlet-name>
         <url-pattern>/Management/BookingHistory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingHistoryDetail</servlet-name>
+        <url-pattern>/Management/BookingHistoryDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetRoomByDeptName</servlet-name>
+        <url-pattern>/Management/GetRoomByDeptName</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

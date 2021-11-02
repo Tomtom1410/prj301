@@ -12,7 +12,7 @@ package model;
 public class Feedback {
     private int feedID;
     private Customer customer;
-    private String feedbackConten;
+    private String feedbackContent;
 
     public Feedback() {
     }
@@ -33,12 +33,12 @@ public class Feedback {
         this.customer = customer;
     }
 
-    public String getFeedbackConten() {
-        return feedbackConten;
+    public String getFeedbackContent() {
+        return feedbackContent;
     }
 
-    public void setFeedbackConten(String feedbackConten) {
-        this.feedbackConten = feedbackConten;
+    public void setFeedbackContent(String feedbackConten) {
+        this.feedbackContent = feedbackConten;
     }
     
     

@@ -18,25 +18,30 @@ public class OrderWaitDBContext extends DBContext {
     public void orderWait(OrderWait o) {
         try {
             connection.setAutoCommit(false);
-            String sql_insertCus = "INSERT INTO [Customer]\n"
-                    + "           ([CustomerName]\n"
-                    + "           ,[Phone]\n"
-                    + "           ,[Email]\n)"
-                    + "     VALUES\n"
-                    + "           (?\n"
-                    + "           ,?\n"
-                    + "           ,?)";
-            PreparedStatement stm_cus = connection.prepareStatement(sql_insertCus);
-            stm_cus.setString(1, o.getCustomer().getCustomerName());
-            stm_cus.setString(2, o.getCustomer().getPhone());
-            stm_cus.setString(3, o.getCustomer().getEmail());
-            stm_cus.executeUpdate();
-
-            String sql_getCusID = "SELECT @@IDENTITY as customerID";
-            PreparedStatement stm_getCusID = connection.prepareStatement(sql_getCusID);
-            rs = stm_getCusID.executeQuery();
-            if (rs.next()) {
-                o.getCustomer().setCustomerID(rs.getInt("customerID"));
+            CustomerDBContext cdb = new CustomerDBContext();
+            Customer c = cdb.customerExits(o.getCustomer());
+            if (c == null) {
+                String sql_insertCus = "INSERT INTO [Customer]\n"
+                        + "           ([CustomerName]\n"
+                        + "           ,[Phone]\n"
+                        + "           ,[Email]\n)"
+                        + "     VALUES\n"
+                        + "           (?\n"
+                        + "           ,?\n"
+                        + "           ,?)";
+                PreparedStatement stm_cus = connection.prepareStatement(sql_insertCus);
+                stm_cus.setString(1, o.getCustomer().getCustomerName());
+                stm_cus.setString(2, o.getCustomer().getPhone());
+                stm_cus.setString(3, o.getCustomer().getEmail());
+                stm_cus.executeUpdate();
+                String sql_getCusID = "SELECT @@IDENTITY as customerID";
+                PreparedStatement stm_getCusID = connection.prepareStatement(sql_getCusID);
+                rs = stm_getCusID.executeQuery();
+                if (rs.next()) {
+                    o.getCustomer().setCustomerID(rs.getInt("customerID"));
+                }
+            } else {
+                o.getCustomer().setCustomerID(c.getCustomerID());
             }
 
             String sql_insertOrder = "INSERT INTO[OrderWait]\n"

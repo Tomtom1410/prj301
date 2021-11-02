@@ -95,7 +95,7 @@
                                         <td>Phone:</td>
                                         <td class="up"><input name="phone" type="text" value="${bookingDetail.orderWait.customer.phone}"></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
                                         <td>Address</td>
                                         <td class="up"><input name="address" type="text" value="${bookingDetail.orderWait.customer.address}"></td>
                                     </tr>
@@ -112,19 +112,6 @@
                                         <td class="up"><input name="checkOut" type="date" value="${bookingDetail.orderWait.checkOut}"></td>
                                     </tr>
                                     <tr>
-                                        <td>Room type:</td>
-                                        <td class="up">
-                                            <select name="deptName">
-                                                <c:forEach items="${roomModel}" var="r">
-                                                    <option 
-                                                        ${r.deptName eq bookingDetail.orderWait.department.deptName? "selected=\"selected\"" : ""}
-                                                        value="${r.deptName}">${r.deptName}
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td>Number of rooms:</td>
                                         <td class="up">
                                             <select name="noOfRoom">
@@ -135,6 +122,22 @@
                                             </select>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>Room type:</td>
+                                        <td class="up">
+                                            <select name="deptName" id="getDeptName">
+                                                <c:forEach items="${roomModel}" var="r">
+                                                    <option 
+                                                        ${r.deptName eq bookingDetail.orderWait.department.deptName? "selected=\"selected\"" : ""}
+                                                        value="${r.deptName}">${r.deptName}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                            <button style="background-color: #1f1cd8; width: 4em; margin: 2% 0;"
+                                                    type="button" onclick="searchDeptbyName(${bookingDetail.orderWait.orderWaitID}, ${pageIndex})">Search</button>
+                                        </td>
+                                    </tr>
+
                                     <tr>
                                         <td>Choose room: </td>
                                         <td>

@@ -13,7 +13,8 @@
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/RoomDetailStyle.css" rel="stylesheet" type="text/css" />
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
-
+        <!--java Script-->
+        <script src="${pageContext.request.contextPath}/JavaScript/HotelCode.js"></script>
     <body>
 
         <div class="container">
@@ -60,7 +61,7 @@
                 <!--slider end-->
 
                 <div class="col-md-3 col-sm-12 booking">
-                    <form action="Booking" method="POST">
+                    <form action="Booking" method="POST" id="booking">
                         <c:if test="${!flag}">
                             <p style="color: #f12626; font-weight: bold;">Please enter valid information and do not leave it blank!</p>
                         </c:if>
@@ -75,17 +76,22 @@
                                 <td><input type="hidden" name="roomName" value="${room.deptName}"></td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" name="customerName" placeholder="Name"></td>
+                                <td><input id="name" class="in" type="text" name="customerName" placeholder="Name"
+                                           pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$" 
+                                           title="Fullname cannot contain special characters!" required></td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" name="phone" placeholder="Phone Number"></td>
+                                <td><input id="phone" class="in" type="text" name="phone" placeholder="Phone Number"
+                                           pattern="^[0-9]{9,20}$" title="Phone number must be number." required></td>
                             </tr>
                             <tr>
-                                <td><input class="in" type="text" name="email" placeholder="E-mail:"></td>
+                                <td><input id="email" class="in" type="text" name="email" placeholder="E-mail:"
+                                           pattern="^[a-z0-9A-Z]+@[a-zA-Z]+(\\.[a-zA-Z]+){1,3}+$" 
+                                           title="Email in the form 'user@domain.com'" required></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <select class="in" name="noOfRoom">
+                                    <select id="noOfRoom" class="in" name="noOfRoom">
                                         <option value="0">Number of rooms</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -95,22 +101,20 @@
                                 </td>
                             </tr>
                             <tr>
-                            <tr>
                                 <td>Check-in:</td>
                             </tr>
-                            <td><input class="in" type="date" name="checkIn"></td>
+                            <tr>
+                                <td><input id="checkin" class="in" type="date" name="checkIn" title="check-in must before check-out" required></td>
                             </tr>
 
-                            <tr>
                             <tr>
                                 <td>Check-out:</td>
                             </tr>
-                            <td><input class="in" type="date" name="checkOut"></td>
-                            </tr>
-
-
                             <tr>
-                                <td><button type="submit">Booking</button></td>
+                                <td><input id="checkout" class="in" type="date" name="checkOut" title="check-out must after check-in" required></td>
+                            </tr>
+                            <tr>
+                                <td><button type="submit" onclick="booking()">Booking</button></td>
                             </tr>
                         </table>
                     </form>

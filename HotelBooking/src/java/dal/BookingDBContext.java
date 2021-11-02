@@ -55,25 +55,51 @@ public class BookingDBContext extends DBContext {
             String sql_order = "UPDATE [OrderWait]\n"
                     + "   SET [Rented] = ?\n"
                     + " WHERE orderWaitID = ?";
-            stm = connection.prepareStatement(sql_order);
-            stm.setBoolean(1, true);
-            stm.setInt(2, b.getOrderWait().getOrderWaitID());
-            stm.executeUpdate();
+            PreparedStatement stm_updateO = connection.prepareStatement(sql_order);
+            stm_updateO.setBoolean(1, true);
+            stm_updateO.setInt(2, b.getOrderWait().getOrderWaitID());
+            stm_updateO.executeUpdate();
+
+            InvoiceDBContext idb = new InvoiceDBContext();
+            idb.insertInvoice(computeTotalPrice(b.getOrderWait().getOrderWaitID()), b.getOrderWait().getCustomer().getCustomerID());
+
             connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 connection.rollback();
             } catch (SQLException e) {
-                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, e);
             }
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
-                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    private int computeTotalPrice(int orderID) {
+        try {
+            String sql_totalPrice = "select Booking_Detail.orderWaitID, Customer.CustomerID,\n"
+                    + "		SUM(price)*DATEDIFF(day,CheckIn,CheckOut) as totalPrice  \n"
+                    + "from Department\n"
+                    + "inner join Booking_Detail on Department.deptID = Booking_Detail.deptID\n"
+                    + "inner join OrderWait on OrderWait.orderWaitID = Booking_Detail.orderWaitID\n"
+                    + "inner join Customer on Customer.CustomerID = OrderWait.orderWaitID\n"
+                    + "where OrderWait.orderWaitID = ?\n"
+                    + "group by Booking_Detail.orderWaitID, CheckIn, CheckOut,Customer.CustomerID";
+            stm = connection.prepareStatement(sql_totalPrice);
+            stm.setInt(1, orderID);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalPrice");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
 
     public ArrayList<BookingDetail> getAllBookingDetails(int pageIndex, int pageSize, String cancel) {
@@ -141,7 +167,7 @@ public class BookingDBContext extends DBContext {
         try {
             String sql = "SELECT DISTINCT BookingID, OrderWait.orderWaitID, noOfRooms, Customer.CustomerID, \n"
                     + "		CustomerName, Customer.Email, Phone, [Address], Rented, CheckIn, CheckOut,\n"
-                    + "		deptID, deptName\n"
+                    + "		deptID, deptName, cancel\n"
                     + "FROM Booking_Detail\n"
                     + "inner JOIN OrderWait ON OrderWait.orderWaitID = Booking_Detail.orderWaitID\n"
                     + "INNER JOIN Customer ON OrderWait.CustomerID = Customer.CustomerID\n"
@@ -172,6 +198,7 @@ public class BookingDBContext extends DBContext {
 
                     bookingDetail = new BookingDetail();
                     bookingDetail.setOrderWait(o);
+                    bookingDetail.setCancel(rs.getBoolean("cancel"));
                 }
                 Department d = new Department();
                 d.setDeptID(rs.getInt("deptID"));
@@ -239,7 +266,7 @@ public class BookingDBContext extends DBContext {
             for (Department d : b.getDepartments()) {
                 String sql_inserBooking = "INSERT INTO [Booking_Detail]\n"
                         + "           ([orderWaitID]\n"
-                        + "           ,[status]\n"
+                        + "           ,[cancel]\n"
                         + "           ,[deptID])\n"
                         + "     VALUES\n"
                         + "           (?\n"
@@ -260,24 +287,27 @@ public class BookingDBContext extends DBContext {
                 stm_dept.executeUpdate();
             }
 
+            InvoiceDBContext idb = new InvoiceDBContext();
+            idb.updateInvoice(computeTotalPrice(b.getOrderWait().getOrderWaitID()), b.getOrderWait().getCustomer().getCustomerID());
+
             CustomerDBContext cdb = new CustomerDBContext();
             cdb.updateCustomer(b.getOrderWait().getCustomer());
 
             OrderWaitDBContext odb = new OrderWaitDBContext();
             odb.updateOrder(b.getOrderWait());
-
+            connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 connection.rollback();
             } catch (SQLException e) {
-                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, e);
             }
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
-                Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -304,9 +334,9 @@ public class BookingDBContext extends DBContext {
         return bookingDetails;
     }
 
-    public void cancelBookingDetail(String orderID) {
+    public void cancelBookingDetail(OrderWait o) {
         try {
-            ArrayList<BookingDetail> bookingOfOrder = getBookingOfOrder(Integer.parseInt(orderID));
+            ArrayList<BookingDetail> bookingOfOrder = getBookingOfOrder(o.getOrderWaitID());
             for (BookingDetail bookingOrder : bookingOfOrder) {
                 String sql_deptFalse = "UPDATE [Department]\n"
                         + "   SET [Status] = ?\n"
@@ -321,21 +351,77 @@ public class BookingDBContext extends DBContext {
                     + "   SET [cancel] = 1\n"
                     + "      ,[deptID] = null"
                     + " WHERE orderWaitID = ?";
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, orderID);
-            stm.executeUpdate();
+            PreparedStatement stm_updateB = connection.prepareStatement(sql);
+            stm_updateB.setInt(1, o.getOrderWaitID());
+            stm_updateB.executeUpdate();
+
+            String sql_invoice = "UPDATE [Invoice]\n"
+                    + "   SET [totalPrice] = null\n"
+                    + " WHERE CustomerID = ?";
+            PreparedStatement stm_updateIn = connection.prepareStatement(sql_invoice);
+            stm_updateIn.setInt(1, o.getCustomer().getCustomerID());
+            stm_updateIn.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(OrderWaitDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void main(String[] args) {
-        BookingDBContext bdb = new BookingDBContext();
-//        BookingDetail b = bdb.getBookingDetail(2);
-//        System.out.println(b.getOrderWait().getCheckIn());
-//        for (BookingDetail b : bdb.getAllBookingDetails(1, 10, "false")) {
+    public ArrayList<BookingDetail> getBookingWithOutPage(String cancel) {
+        ArrayList<BookingDetail> bookingDetails = new ArrayList<>();
+        try {
+            String sql = "select distinct Booking_Detail.orderWaitID,\n"
+                    + "    Customer.CustomerID, CustomerName, [Address], Phone, Email,\n"
+                    + "CheckIn, CheckOut, noOfRooms, deptName, Rented, cancel \n"
+                    + "from Booking_Detail \n"
+                    + "inner join OrderWait on OrderWait.orderWaitID = Booking_Detail.orderWaitID \n"
+                    + "inner join Customer on OrderWait.CustomerID = Customer.CustomerID\n";
+
+            if (cancel.equals("true")) {
+                sql += "where cancel = 1";
+            }
+            if (cancel.equals("false")) {
+                sql += "where cancel = 0";
+            }
+
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                BookingDetail b = new BookingDetail();
+                b.setCancel(rs.getBoolean("cancel"));
+
+                OrderWait o = new OrderWait();
+                o.setOrderWaitID(rs.getInt("orderWaitID"));
+                o.setNoOfRoom(rs.getInt("noOfRooms"));
+                o.setRented(true);
+                o.setCheckIn(rs.getDate("CheckIn"));
+                o.setCheckOut(rs.getDate("CheckOut"));
+                Department d = new Department();
+                d.setDeptName(rs.getString("deptName"));
+                o.setDepartment(d);
+                Customer c = new Customer();
+                c.setCustomerID(rs.getInt("CustomerID"));
+                c.setCustomerName(rs.getString("CustomerName"));
+                c.setEmail(rs.getString("Email"));
+                c.setPhone(rs.getString("Phone"));
+                c.setAddress(rs.getString("Address"));
+                o.setCustomer(c);
+                b.setOrderWait(o);
+
+                bookingDetails.add(b);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bookingDetails;
+    }
+
+//    public static void main(String[] args) {
+//        BookingDBContext bdb = new BookingDBContext();
+////        BookingDetail b = bdb.getBookingDetail(2);
+////        System.out.println(b.getOrderWait().getCheckIn());
+//        for (BookingDetail b : bdb.getAllBookingDetails(2, 1, "false")) {
 //            System.out.println(b.getOrderWait().getOrderWaitID() + " " + b.getOrderWait().getCustomer().getCustomerName());
 //        }
-        System.out.println(bdb.totalRowBookingDetail("null"));
-    }
+//        System.out.println(bdb.totalRowBookingDetail("false"));
+//    }
 }

@@ -75,4 +75,27 @@ public class CustomerDBContext extends DBContext {
             }
         }
     }
+
+    public Customer customerExits(Customer c) {
+        try {
+            String sql = "select * from Customer\n"
+                    + "where CustomerName = ? AND Phone = ? \n"
+                    + "AND   Email = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, c.getCustomerName());
+            stm.setString(2, c.getPhone());
+            stm.setString(3, c.getEmail());
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                c.setCustomerID(rs.getInt("customerID"));
+                c.setAddress(rs.getString("Address"));
+                return c;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 }

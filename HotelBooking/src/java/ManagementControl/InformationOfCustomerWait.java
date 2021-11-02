@@ -31,7 +31,7 @@ public class InformationOfCustomerWait extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageSize = 40;
+        int pageSize = 20;
         String raw_page = request.getParameter("page");
         if (raw_page == null || raw_page.length() == 0) {
             raw_page = "1";
