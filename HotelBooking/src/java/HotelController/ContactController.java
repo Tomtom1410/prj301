@@ -7,14 +7,12 @@ package HotelController;
 
 import dal.FeedBackDBContext;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Customer;
 import model.Feedback;
-import model.Invoice;
 
 /**
  *

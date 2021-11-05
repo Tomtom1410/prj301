@@ -31,7 +31,7 @@ public class BookingDBContext extends DBContext {
             for (Department d : b.getDepartments()) {
                 String sql = "INSERT INTO [Booking_Detail]\n"
                         + "           ([orderWaitID]\n"
-                        + "           ,[status]\n"
+                        + "           ,[cancel]\n"
                         + "           ,[deptID])\n"
                         + "     VALUES\n"
                         + "           (?\n"
@@ -83,12 +83,15 @@ public class BookingDBContext extends DBContext {
     private int computeTotalPrice(int orderID) {
         try {
             String sql_totalPrice = "select Booking_Detail.orderWaitID, Customer.CustomerID,\n"
-                    + "		SUM(price)*DATEDIFF(day,CheckIn,CheckOut) as totalPrice  \n"
+                    + "CASE\n"
+                    + "    WHEN CheckIn = CheckOut THEN SUM(price)*1\n"
+                    + "    ELSE SUM(price)*DATEDIFF(day,CheckIn,CheckOut)\n"
+                    + "END as totalPrice\n"
                     + "from Department\n"
-                    + "inner join Booking_Detail on Department.deptID = Booking_Detail.deptID\n"
+                    + "inner join Booking_Detail on Booking_Detail.deptID = Department.deptID\n"
                     + "inner join OrderWait on OrderWait.orderWaitID = Booking_Detail.orderWaitID\n"
-                    + "inner join Customer on Customer.CustomerID = OrderWait.orderWaitID\n"
-                    + "where OrderWait.orderWaitID = ?\n"
+                    + "inner join Customer on Customer.CustomerID = OrderWait.CustomerID\n"
+                    + "where Booking_Detail.orderWaitID = ?\n"
                     + "group by Booking_Detail.orderWaitID, CheckIn, CheckOut,Customer.CustomerID";
             stm = connection.prepareStatement(sql_totalPrice);
             stm.setInt(1, orderID);
@@ -415,13 +418,14 @@ public class BookingDBContext extends DBContext {
         return bookingDetails;
     }
 
-//    public static void main(String[] args) {
-//        BookingDBContext bdb = new BookingDBContext();
-////        BookingDetail b = bdb.getBookingDetail(2);
-////        System.out.println(b.getOrderWait().getCheckIn());
+    public static void main(String[] args) {
+        BookingDBContext bdb = new BookingDBContext();
+//        BookingDetail b = bdb.getBookingDetail(2);
+//        System.out.println(b.getOrderWait().getCheckIn());
 //        for (BookingDetail b : bdb.getAllBookingDetails(2, 1, "false")) {
 //            System.out.println(b.getOrderWait().getOrderWaitID() + " " + b.getOrderWait().getCustomer().getCustomerName());
 //        }
 //        System.out.println(bdb.totalRowBookingDetail("false"));
-//    }
+        System.out.println(bdb.computeTotalPrice(17));
+    }
 }

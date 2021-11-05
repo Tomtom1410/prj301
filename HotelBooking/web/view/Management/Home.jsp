@@ -16,7 +16,7 @@
             <div class="col-md-10 right">
                 <div class="row title">
                     <div class="col-md-4">
-                        <h3><span class="glyphicon glyphicon-align-justify"></span>Home</h3>
+                        <h3><span class="glyphicon glyphicon-align-justify"></span> Home</h3>
                     </div>
                 </div>
 

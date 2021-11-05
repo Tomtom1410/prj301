@@ -9,6 +9,7 @@
         <title>Del Luna Management</title>
         <!--java Script-->
         <script src="${pageContext.request.contextPath}/JavaScript/ManagementCode.js"></script>
+        <script src="${pageContext.request.contextPath}/JavaScript/OrderWaitCode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/OrderWaitStyle.css" rel="stylesheet" type="text/css" />
@@ -21,7 +22,7 @@
                 <div class="col-md-10 right">
                     <div class="row title">
                         <div class="col-md-4">
-                            <h3><span class="glyphicon glyphicon-align-justify"></span>Information Of Customer</h3>
+                            <h3><span class="glyphicon glyphicon-align-justify"></span> Information Of Customer</h3>
                         </div>
                         <div class="col-md-4 Search">
                             <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search">
@@ -77,7 +78,7 @@
                     </div>
                     <c:if test="${bookingDetail != null}">
                         <div class="detail col-md-4">
-                            <form action="ChangeInformationOfCustomer" method="POST">
+                            <form action="ChangeInformationOfCustomer" method="POST" id="insertBooking">
                                 <c:if test="${flag eq \"false\"}">
                                     <p style="color: red;">Please check the room. The number of rooms is
                                         different from the number of rooms the customer wants!</p>
@@ -114,7 +115,7 @@
                                     <tr>
                                         <td>Number of rooms:</td>
                                         <td class="up">
-                                            <select name="noOfRoom">
+                                            <select name="noOfRoom" id="noOfRoom">
                                                 <option ${bookingDetail.orderWait.noOfRoom == 1 ? "selected=\"selected\"" : ""} value="1">1</option>
                                                 <option ${bookingDetail.orderWait.noOfRoom == 2 ? "selected=\"selected\"" : ""} value="2">2</option>
                                                 <option ${bookingDetail.orderWait.noOfRoom == 3 ? "selected=\"selected\"" : ""} value="3">3</option>
@@ -155,7 +156,7 @@
                                     <p style="color: red; font-weight: bold">Change information done!</p>
                                 </c:if>
                                 <div class="control">
-                                    <button class="save" name="button" value="update" type="submit">Update</button>
+                                    <button class="save" name="button" value="update" onclick="checkRoom()" type="submit">Update</button>
                                     <button class="del" name="button" value="delete" type="submit">Cancel</button>
                                 </div>
                             </form>

@@ -64,8 +64,8 @@ public class BookingDetailController extends HttpServlet {
         request.setAttribute("totalPage", totalPage);
 
         DepartmentDBContext ddb = new DepartmentDBContext();
-
-        ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName(), false);
+        
+        ArrayList<Department> roomByName = ddb.getRoomForOrder(o.getDepartment().getDeptName());
         request.setAttribute("roomByName", roomByName);
         request.setAttribute("o", o);
         request.setAttribute("orders", OrderWait);
@@ -96,92 +96,23 @@ public class BookingDetailController extends HttpServlet {
             OrderWait o = new OrderWait();
             o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
             o.setNoOfRoom(Integer.parseInt(request.getParameter("noOfRoom")));
+            Customer c = new  Customer();
+            c.setCustomerID(Integer.parseInt(request.getParameter("customerID")));
+            o.setCustomer(c);
             String[] roomIDs = request.getParameterValues("deptID");
-
-            if (roomIDs == null || roomIDs.length != o.getNoOfRoom()) {
-                int pageSize = 20;
-                String raw_page = request.getParameter("page");
-                if (raw_page == null || raw_page.length() == 0) {
-                    raw_page = "1";
-                }
-                int pageIndex = Integer.parseInt(raw_page);
-
-                OrderWaitDBContext odb = new OrderWaitDBContext();
-                ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, false);
-                for (OrderWait od : OrderWait) {
-                    if (od.getOrderWaitID() == o.getOrderWaitID()) {
-                        o = od;
-                        break;
-                    }
-                }
-                String title = "wait";
-                request.setAttribute("title", title);
-                int totalRow = odb.totalRow(true);
-                int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-                String url = "InformationOfCustomerWait?page=";
-                request.setAttribute("urlPage", url);
-                request.setAttribute("pageIndex", pageIndex);
-                request.setAttribute("totalPage", totalPage);
-
-                DepartmentDBContext ddb = new DepartmentDBContext();
-
-                ArrayList<Department> roomByName = ddb.getRoomByName(o.getDepartment().getDeptName(), false);
-                request.setAttribute("roomByName", roomByName);
-                request.setAttribute("o", o);
-                request.setAttribute("orders", OrderWait);
-                String tag = "order";
-                request.setAttribute("tagMenu", tag);
-                boolean flag = false;
-                request.setAttribute("flag", flag);
-                request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
-            } else {
-                ArrayList<Department> rooms = new ArrayList<>();
-                for (String roomID : roomIDs) {
-                    Department d = new Department();
-                    d.setDeptID(Integer.parseInt(roomID));
-                    rooms.add(d);
-                }
-                BookingDetail b = new BookingDetail();
-                b.setOrderWait(o);
-                b.setDepartments(rooms);
-                bdb.insertBooking(b);
-//             forward to jsp and notic notification done
-                boolean notic = true;
-                request.setAttribute("notic", notic);
-
-                int pageSize = 20;
-                String raw_page = request.getParameter("page");
-                if (raw_page == null || raw_page.length() == 0) {
-                    raw_page = "1";
-                }
-                int pageIndex = Integer.parseInt(raw_page);
-
-                OrderWaitDBContext odb = new OrderWaitDBContext();
-                ArrayList<OrderWait> OrderWait = odb.getInformationOrderWait(pageIndex, pageSize, false);
-                for (OrderWait od : OrderWait) {
-                    if (od.getOrderWaitID() == o.getOrderWaitID()) {
-                        o = od;
-                        break;
-                    }
-                }
-                String title = "wait";
-                request.setAttribute("title", title);
-                int totalRow = odb.totalRow(true);
-                int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-                String url = "InformationOfCustomerWait?page=";
-                request.setAttribute("urlPage", url);
-                request.setAttribute("pageIndex", pageIndex);
-                request.setAttribute("totalPage", totalPage);
-
-                request.setAttribute("o", o);
-                request.setAttribute("orders", OrderWait);
-                String tag = "order";
-                request.setAttribute("tagMenu", tag);
-                request.getRequestDispatcher("../view/Management/OrderWait.jsp").forward(request, response);
-
+            
+            ArrayList<Department> rooms = new ArrayList<>();
+            for (String roomID : roomIDs) {
+                Department d = new Department();
+                d.setDeptID(Integer.parseInt(roomID));
+                rooms.add(d);
             }
+            BookingDetail b = new BookingDetail();
+            b.setOrderWait(o);
+            b.setDepartments(rooms);
+            bdb.insertBooking(b);
         }
-
+        response.sendRedirect("InformationOfCustomerWait");
     }
 
     /**

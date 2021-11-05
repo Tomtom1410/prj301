@@ -9,6 +9,7 @@
         <title>Del Luna Management</title>
         <!--java Script-->
         <script src="${pageContext.request.contextPath}/JavaScript/ManagementCode.js"></script>
+        <script src="${pageContext.request.contextPath}/JavaScript/OrderWaitCode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/OrderWaitStyle.css" rel="stylesheet" type="text/css" />
@@ -21,7 +22,7 @@
                 <div class="col-md-10 right">
                     <div class="row title">
                         <div class="col-md-4">
-                            <h3><span class="glyphicon glyphicon-align-justify"></span>Information Of Customer</h3>
+                            <h3><span class="glyphicon glyphicon-align-justify"></span> Information Of Customer</h3>
                         </div>
                         <div class="col-md-4 Search">
                             <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search">
@@ -76,7 +77,7 @@
                     </div>
                     <c:if test="${o != null}">
                         <div class="detail col-md-4">
-                            <form action="BookingDetail" method="POST">
+                            <form action="BookingDetail" method="POST" id="insertBooking">
                                 <c:if test="${flag eq \"false\"}">
                                     <p style="color: red;">Please check the room. The number of rooms is
                                         different from the number of rooms the customer wants!</p>
@@ -84,6 +85,7 @@
                                 <table>
                                     <tr>
                                         <td><input type="hidden" name="oID" value="${o.orderWaitID}"></td>
+                                         <td><input type="hidden" name="customerID" value="${o.customer.customerID}"></td>
                                     </tr>
                                     <tr>
                                         <td>Name: ${o.customer.customerName}</td>
@@ -108,7 +110,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <input type="hidden" name="noOfRoom" value="${o.noOfRoom}">
+                                            <input type="hidden" name="noOfRoom" id="noOfRoom" value="${o.noOfRoom}">
                                             Number of rooms: ${o.noOfRoom}
                                         </td>
                                     </tr>
@@ -124,10 +126,8 @@
                                 <c:if test="${notic}">
                                     <p style="color: red; font-weight: bold">Insert done!</p>
                                 </c:if>
-                               <div class="control">
-                                    <button class="save" name="button" value="update" type="submit">Update</button>
-                                    <button class="del" name="button" value="delete" type="submit">Cancel</button>
-                                </div>
+                                <button class="save" name="button" onclick="checkRoom()" value="update" type="submit">Update</button>
+                                <button class="del" name="button" value="delete" type="submit">Cancel</button>
                             </form>
 
                         </div>

@@ -63,7 +63,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
 
         ArrayList<Department> roomModel = ddb.getRoomModel();
         request.setAttribute("roomModel", roomModel);
-        ArrayList<Department> roomByName = ddb.getRoomByName(b.getOrderWait().getDepartment().getDeptName(), null);
+        ArrayList<Department> roomByName = ddb.getRoomByName(b.getOrderWait().getDepartment().getDeptName());
         request.setAttribute("roomByName", roomByName);
         String tag = "order";
         request.setAttribute("tagMenu", tag);
@@ -93,7 +93,7 @@ public class ChangeInformationOfCustomer extends HttpServlet {
             c.setCustomerID(Integer.parseInt(request.getParameter("customerID")));
             o.setCustomer(c);
             bdb.cancelBookingDetail(o);
-
+            response.sendRedirect("InformationOfCustomerHadRoom");
         } else {
             //get orderWait
             OrderWait o = new OrderWait();
@@ -103,8 +103,6 @@ public class ChangeInformationOfCustomer extends HttpServlet {
             o.setCheckOut(Date.valueOf(request.getParameter("checkOut")));
             Department d = new Department();
             d.setDeptName(request.getParameter("deptName"));
-//            String deptName = (String)request.getAttribute("deptName");
-//            d.setDeptName(deptName);
             o.setDepartment(d);
             // get customer
             Customer c = new Customer();
@@ -117,7 +115,23 @@ public class ChangeInformationOfCustomer extends HttpServlet {
 
             String[] roomIDs = request.getParameterValues("deptID");
 
-            if (roomIDs == null || roomIDs.length != o.getNoOfRoom()) {
+            // update bookingDetail
+            ArrayList<Department> rooms = new ArrayList<>();
+            for (String roomID : roomIDs) {
+                Department r = new Department();
+                r.setDeptID(Integer.parseInt(roomID));
+                rooms.add(r);
+            }
+
+            BookingDetail b = new BookingDetail();
+            b.setDepartments(rooms);
+            b.setOrderWait(o);
+            bdb.updateInforBooking(b);
+            // forward jsp and notification done
+            if (request.getParameter(
+                    "oID").length() == 0) {
+                response.sendRedirect("InformationOfCustomerHadRoom");
+            } else {
                 int pageSize = 20;
                 String raw_page = request.getParameter("page");
                 if (raw_page == null || raw_page.length() == 0) {
@@ -127,8 +141,10 @@ public class ChangeInformationOfCustomer extends HttpServlet {
 
                 ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
                 request.setAttribute("allBookingNotCancel", allBookingDetails);
-                BookingDetail b = bdb.getBookingDetail(o.getOrderWaitID());
-                request.setAttribute("bookingDetail", b);
+
+                o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
+                BookingDetail bo = bdb.getBookingDetail(o.getOrderWaitID());
+                request.setAttribute("bookingDetail", bo);
 
                 int totalRow = bdb.totalRowBookingDetail("false");
                 int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
@@ -138,75 +154,21 @@ public class ChangeInformationOfCustomer extends HttpServlet {
                 request.setAttribute("totalPage", totalPage);
 
                 DepartmentDBContext ddb = new DepartmentDBContext();
+
                 ArrayList<Department> roomModel = ddb.getRoomModel();
                 request.setAttribute("roomModel", roomModel);
-                ArrayList<Department> roomByName = ddb.getRoomByName(b.getOrderWait().getDepartment().getDeptName(), null);
+                ArrayList<Department> roomByName = ddb.getRoomByName(bo.getOrderWait().getDepartment().getDeptName());
                 request.setAttribute("roomByName", roomByName);
-                // set tag and tagMenu
                 String tag = "order";
                 request.setAttribute("tagMenu", tag);
-                boolean flag = false;
-                request.setAttribute("flag", flag);
+                boolean notic = true;
+                request.setAttribute("notic", notic);
                 String title = "hadRoom";
                 request.setAttribute("title", title);
-                response.getWriter().println(url);
                 request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
-            } else {
-                // update bookingDetail
-                ArrayList<Department> rooms = new ArrayList<>();
-                for (String roomID : roomIDs) {
-                    Department r = new Department();
-                    r.setDeptID(Integer.parseInt(roomID));
-                    rooms.add(r);
-                }
-
-                BookingDetail b = new BookingDetail();
-                b.setDepartments(rooms);
-                b.setOrderWait(o);
-                bdb.updateInforBooking(b);
             }
         }
 
-        // forward jsp and notification done
-        if (request.getParameter("oID").length() == 0) {
-            response.sendRedirect("InformationOfCustomerHadRoom");
-        } else {
-            int pageSize = 20;
-            String raw_page = request.getParameter("page");
-            if (raw_page == null || raw_page.length() == 0) {
-                raw_page = "1";
-            }
-            int pageIndex = Integer.parseInt(raw_page);
-
-            ArrayList<BookingDetail> allBookingDetails = bdb.getAllBookingDetails(pageIndex, pageSize, "false");
-            request.setAttribute("allBookingNotCancel", allBookingDetails);
-
-            OrderWait o = new OrderWait();
-            o.setOrderWaitID(Integer.parseInt(request.getParameter("oID")));
-            BookingDetail bo = bdb.getBookingDetail(o.getOrderWaitID());
-            request.setAttribute("bookingDetail", bo);
-
-            int totalRow = bdb.totalRowBookingDetail("false");
-            int totalPage = (totalRow % pageSize == 0) ? totalRow / pageSize : totalRow / pageSize + 1;
-            String url = "InformationOfCustomerHadRoom?page=";
-            request.setAttribute("url", url);
-            request.setAttribute("pageIndex", pageIndex);
-            request.setAttribute("totalPage", totalPage);
-
-            DepartmentDBContext ddb = new DepartmentDBContext();
-
-            ArrayList<Department> roomModel = ddb.getRoomModel();
-            request.setAttribute("roomModel", roomModel);
-            ArrayList<Department> roomByName = ddb.getRoomByName(bo.getOrderWait().getDepartment().getDeptName(), null);
-            request.setAttribute("roomByName", roomByName);
-            String tag = "order";
-            request.setAttribute("tagMenu", tag);
-            boolean notic = true;
-            request.setAttribute("notic", notic);
-            String title = "hadRoom";
-            request.setAttribute("title", title);
-            request.getRequestDispatcher("../view/Management/OrderHaveRoom.jsp").forward(request, response);
-        }
     }
 
     /**

@@ -72,7 +72,6 @@ public class BookingController extends HttpServlet {
         o.setDepartment(d);
         o.setCustomer(customer);
         OrderWaitDBContext odb = new OrderWaitDBContext();
-
         odb.orderWait(o);
         response.sendRedirect("Room");
     }

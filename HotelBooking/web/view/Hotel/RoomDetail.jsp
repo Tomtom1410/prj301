@@ -7,14 +7,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Hotel Del Luna</title>
-        <script src="mycode.js"></script>
         <!-- Bootstrap && CSS-->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/RoomDetailStyle.css" rel="stylesheet" type="text/css" />
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
         <!--java Script-->
-        <script src="${pageContext.request.contextPath}/JavaScript/HotelCode.js"></script>
     <body>
 
         <div class="container">
@@ -77,7 +75,7 @@
                             </tr>
                             <tr>
                                 <td><input id="name" class="in" type="text" name="customerName" placeholder="Name"
-                                           pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$" 
+                                           pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z ]*)*$" 
                                            title="Fullname cannot contain special characters!" required></td>
                             </tr>
                             <tr>
@@ -124,11 +122,12 @@
             </div>
             <!-- contianer end-->
 
-            <!--javascript of Bootstrap-->
-            <script src="${pageContext.request.contextPath}/Bootstrap/js/Jquery.js"></script>
-        <script src="${pageContext.request.contextPath}/Bootstrap/js/bootstrap.min.js"></script>
+        </body>
+        <!--javascript of Bootstrap-->
+    <script src="${pageContext.request.contextPath}/Bootstrap/js/Jquery.js"></script>
+    <script src="${pageContext.request.contextPath}/Bootstrap/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/JavaScript/BookingCode.js"></script>
 
 
-    </body>
 
 </html>

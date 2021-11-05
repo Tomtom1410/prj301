@@ -65,7 +65,7 @@ public class GetRoomByDeptName extends HttpServlet {
 
         ArrayList<Department> roomModel = ddb.getRoomModel();
         request.setAttribute("roomModel", roomModel);
-        ArrayList<Department> roomByName = ddb.getRoomByName(deptName, null);
+        ArrayList<Department> roomByName = ddb.getRoomByName(deptName);
         request.setAttribute("roomByName", roomByName);
         String tag = "order";
         request.setAttribute("tagMenu", tag);

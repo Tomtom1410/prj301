@@ -1,4 +1,3 @@
-
 package dal;
 
 import java.sql.PreparedStatement;
@@ -8,6 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Department;
+import model.OrderWait;
 
 /**
  *
@@ -65,7 +65,7 @@ public class DepartmentDBContext extends DBContext {
         return depts;
     }
 
-    public ArrayList<Department> getRoomByName(String name, Boolean status) {
+    public ArrayList<Department> getRoomByName(String name) {
         ArrayList<Department> deptList = new ArrayList<>();
         try {
             String sql = "select deptID, deptName, [Status], price, Department.roomType,\n"
@@ -76,10 +76,6 @@ public class DepartmentDBContext extends DBContext {
                     + "where deptName = ? \n";
             stm = connection.prepareStatement(sql);
             stm.setString(1, name);
-            if (status != null) {
-                sql += "AND [Status] = 0";
-//                stm.setBoolean(2, status);
-            }
             rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -164,5 +160,33 @@ public class DepartmentDBContext extends DBContext {
             Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return depts;
+    }
+
+    public ArrayList<Department> getRoomForOrder(String deptName) {
+        ArrayList<Department> departments = new ArrayList<>();
+        try {
+            String sql = "select deptID  \n"
+                    + "from Department\n"
+                    + "where Department.deptName = ? and [Status] = 0\n";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, deptName);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Department d = new Department();
+                d.setDeptID(rs.getInt(1));
+                departments.add(d);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return departments;
+    }
+    
+    public static void main(String[] args) {
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        
+        for (Department department : ddb.getRoomByName("SILVER DOUBLE ROOM")) {
+            System.out.println(department.getDeptID());
+        }
     }
 }

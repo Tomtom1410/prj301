@@ -16,7 +16,7 @@
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/FooterStyle.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/CSS/HotelStyle/HeaderStyle.css" rel="stylesheet" type="text/css"/>
         <!--java Script-->
-        <script src="${pageContext.request.contextPath}/JavaScript/HotelCode.js"></script>
+        <script src="${pageContext.request.contextPath}/JavaScript/ContactCode.js"></script>
 
     </head>
 
