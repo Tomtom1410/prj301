@@ -21,4 +21,3 @@ function searchDeptbyName(orderWaitID, pageIndex) {
     var value = keyWord.options[keyWord.selectedIndex].value;
     window.location.href = "GetRoomByDeptName?orderWaitID=" + orderWaitID + "&deptName=" + value + "&page=" + pageIndex;
 }
-

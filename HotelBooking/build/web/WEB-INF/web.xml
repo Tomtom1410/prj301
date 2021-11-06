@@ -68,6 +68,18 @@
         <servlet-name>GetRoomByDeptName</servlet-name>
         <servlet-class>ManagementControl.GetRoomByDeptName</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackController</servlet-name>
+        <servlet-class>ManagementControl.FeedbackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchController</servlet-name>
+        <servlet-class>ManagementControl.SearchController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogOutController</servlet-name>
+        <servlet-class>LoginSecurity.LogOutController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -135,6 +147,18 @@
     <servlet-mapping>
         <servlet-name>GetRoomByDeptName</servlet-name>
         <url-pattern>/Management/GetRoomByDeptName</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackController</servlet-name>
+        <url-pattern>/Management/Feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchController</servlet-name>
+        <url-pattern>/Management/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogOutController</servlet-name>
+        <url-pattern>/LogOut</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -16,27 +16,6 @@ import model.Department;
 
 public class RoomRented extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        ArrayList<Department> roomNotEmpty = ddb.getRoomByKey("1");
-
-        request.setAttribute("roomNotEmpty", roomNotEmpty);
-        String tag = "check-rent";
-        request.setAttribute("tagMenu", tag);
-        request.getRequestDispatcher("../view/Management/RoomRented.jsp").forward(request, response);
-
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -49,7 +28,13 @@ public class RoomRented extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DepartmentDBContext ddb = new DepartmentDBContext();
+        ArrayList<Department> roomNotEmpty = ddb.getRoomByKey("1");
+
+        request.setAttribute("roomNotEmpty", roomNotEmpty);
+        String tag = "check-rent";
+        request.setAttribute("tagMenu", tag);
+        request.getRequestDispatcher("../view/Management/RoomRented.jsp").forward(request, response);
     }
 
     /**
@@ -63,7 +48,10 @@ public class RoomRented extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String deptID = request.getParameter("deptID");
+        DepartmentDBContext dbd = new DepartmentDBContext();
+        dbd.checkOut(deptID);
+        response.sendRedirect("RoomRented");
     }
 
     /**

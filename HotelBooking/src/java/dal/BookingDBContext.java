@@ -117,7 +117,7 @@ public class BookingDBContext extends DBContext {
                     + "	inner join Customer on OrderWait.CustomerID = Customer.CustomerID\n"
                     + ")\n"
                     + "SELECT * \n"
-                    + "FROM  (SELECT ROW_NUMBER() OVER (ORDER BY OrderWaitID asc) as rownum,\n"
+                    + "FROM  (SELECT ROW_NUMBER() OVER (ORDER BY OrderWaitID desc) as rownum,\n"
                     + "			orderWaitID, CustomerID, CustomerName, [Address], Phone, Email,\n"
                     + "			CheckIn, CheckOut, noOfRooms, deptName, Rented, cancel\n"
                     + "		 from b) as o\n"
@@ -418,14 +418,61 @@ public class BookingDBContext extends DBContext {
         return bookingDetails;
     }
 
-    public static void main(String[] args) {
-        BookingDBContext bdb = new BookingDBContext();
-//        BookingDetail b = bdb.getBookingDetail(2);
-//        System.out.println(b.getOrderWait().getCheckIn());
+    public ArrayList<BookingDetail> searchBookingDetails(String value, String condition) {
+        ArrayList<BookingDetail> bookingDetails = new ArrayList<>();
+        try {
+            String sql = "select distinct Booking_Detail.orderWaitID, \n"
+                    + "        Customer.CustomerID, CustomerName, [Address], Phone, Email, \n"
+                    + "        CheckIn, CheckOut, noOfRooms, deptName, Rented, cancel \n"
+                    + "from Booking_Detail \n"
+                    + "inner join OrderWait on OrderWait.orderWaitID = Booking_Detail.orderWaitID \n"
+                    + "inner join Customer on OrderWait.CustomerID = Customer.CustomerID\n"
+                    + "where CustomerName like ?";
+            if (condition.equals("0")) {
+                sql += " AND cancel = 0";
+            }
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + value + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                BookingDetail b = new BookingDetail();
+                b.setCancel(rs.getBoolean("cancel"));
+
+                OrderWait o = new OrderWait();
+                o.setOrderWaitID(rs.getInt("orderWaitID"));
+                o.setNoOfRoom(rs.getInt("noOfRooms"));
+                o.setRented(true);
+                o.setCheckIn(rs.getDate("CheckIn"));
+                o.setCheckOut(rs.getDate("CheckOut"));
+                Department d = new Department();
+                d.setDeptName(rs.getString("deptName"));
+                o.setDepartment(d);
+                Customer c = new Customer();
+                c.setCustomerID(rs.getInt("CustomerID"));
+                c.setCustomerName(rs.getString("CustomerName"));
+                c.setEmail(rs.getString("Email"));
+                c.setPhone(rs.getString("Phone"));
+                c.setAddress(rs.getString("Address"));
+                o.setCustomer(c);
+                b.setOrderWait(o);
+
+                bookingDetails.add(b);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bookingDetails;
+    }
+
+//    public static void main(String[] args) {
+//        BookingDBContext bdb = new BookingDBContext();
+////        BookingDetail b = bdb.getBookingDetail(2);
+////        System.out.println(b.getOrderWait().getCheckIn());
 //        for (BookingDetail b : bdb.getAllBookingDetails(2, 1, "false")) {
 //            System.out.println(b.getOrderWait().getOrderWaitID() + " " + b.getOrderWait().getCustomer().getCustomerName());
 //        }
 //        System.out.println(bdb.totalRowBookingDetail("false"));
-        System.out.println(bdb.computeTotalPrice(17));
-    }
+//        System.out.println(bdb.computeTotalPrice(17));
+//    }
 }

@@ -19,3 +19,8 @@ function checkRoom() {
         };
     }
 }
+
+function search(keyName){
+    var content = document.getElementById('content').value;
+    window.location.href = "search?value=" + content + "&keyName="+keyName;
+}

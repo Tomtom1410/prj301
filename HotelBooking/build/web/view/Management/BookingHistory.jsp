@@ -9,6 +9,7 @@
         <title>Del Luna Management</title>
         <!--java Script-->
         <script src="${pageContext.request.contextPath}/JavaScript/ManagementCode.js"></script>
+        <script src="${pageContext.request.contextPath}/JavaScript/BookingCode.js"></script>
         <!-- Bootstrap -->
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/BookingHistoryStyle.css" rel="stylesheet" type="text/css" />
@@ -24,16 +25,22 @@
                             <h3><span class="glyphicon glyphicon-align-justify"></span> Booking History</h3>
                         </div>
                         <div class="col-md-4 Search">
-                            <span class=" glyphicon glyphicon-search"></span> <input type="text" placeholder="Search">
-                        </div>
+                            <span class=" glyphicon glyphicon-search"></span> 
+                            <input id="content"
+                            <c:if test="${value != null}">
+                                value =${value}
+                            </c:if>
+                            type="text" placeholder="Enter customer's name">
+                        <button type="button" onclick="search('booking')">Search</button>
                     </div>
-                    <div class="row information">
-                        <div class="Banner">
-                            <form action="BookingHistory" method="POST">
-                                <span>Display: </span>
-                                <select name="sort">
-                                    <option value="all">All</option>
-                                    <option
+                </div>
+                <div class="row information">
+                    <div class="Banner">
+                        <form action="BookingHistory" method="POST">
+                            <span>Display: </span>
+                            <select name="sort">
+                                <option value="all">All</option>
+                                <option
                                     <c:if test="${tag eq \"notCancel\"}">
                                         selected="selected"
                                     </c:if>

@@ -3,24 +3,55 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package HotelController;
+package ManagementControl;
 
 import dal.FeedBackDBContext;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Customer;
 import model.Feedback;
 
 /**
  *
  * @author Tom
  */
-public class ContactController extends HttpServlet {
+public class FeedbackController extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String tagMenu = "feedback";
+        int pageSize = 20;
+        String raw_page = request.getParameter("page");
+        if (raw_page == null || raw_page.length() == 0) {
+            raw_page = "1";
+        }
+        int pageIndex = Integer.parseInt(raw_page);
+        FeedBackDBContext fdb = new FeedBackDBContext();
+        ArrayList<Feedback> feedback = fdb.getFeedback(pageIndex, pageSize);
+        int totalFeed = fdb.toltalFeedback();
+        int totalPage = (totalFeed % pageSize == 0) ? totalFeed / pageSize : totalFeed / pageSize + 1;
+        String url = "Feedback?page=";
+        request.setAttribute("url", url);
+        request.setAttribute("tagMenu", tagMenu);
+        request.setAttribute("feedbacks", feedback);
+        request.setAttribute("pageIndex", pageIndex);
+        request.setAttribute("totalPage", totalPage);
+        
+        request.getRequestDispatcher("../view/Management/Feedback.jsp").forward(request, response);
+
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -34,10 +65,7 @@ public class ContactController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String tag = "contact";
-
-        request.setAttribute("tag", tag);
-        request.getRequestDispatcher("view/Hotel/Contact.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -51,21 +79,7 @@ public class ContactController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Customer c = new Customer();
-        c.setCustomerName(request.getParameter("name"));
-        c.setEmail(request.getParameter("email"));
-        c.setPhone(request.getParameter("phone"));
-        c.setAddress(request.getParameter("address"));
-
-        Feedback f = new Feedback();
-        f.setCustomer(c);
-        f.setFeedbackContent(request.getParameter("feedback"));
-        LocalDate date = java.time.LocalDate.now();
-        f.setDate(Date.valueOf(date));
-
-        FeedBackDBContext fdb = new FeedBackDBContext();
-        fdb.insertFeedBack(f);
-        response.sendRedirect("Contact");
+        processRequest(request, response);
     }
 
     /**

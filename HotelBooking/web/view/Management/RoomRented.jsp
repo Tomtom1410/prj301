@@ -49,7 +49,10 @@
                                         <p>Room Number: ${rN.deptID}</p>
                                         <p>Check-out: ${rN.time}</p>
                                         <p>Status: Rented</p>
-                                        <p><input type="button" value="Check-out"></p>
+                                        <form action="RoomRented" method="POST">
+                                            <input type="hidden" name="deptID" value="${rN.deptID}">
+                                            <input type="submit" value="Check-out">
+                                        </form>
                                     </div>
                                 </c:if>
                             </c:forEach>
@@ -67,7 +70,10 @@
                                         <p>Room Number: ${rN.deptID}</p>
                                         <p>Check-out: ${rN.time}</p>
                                         <p>Status: Rented</p>
-                                        <p><input type="button" value="Check-out"></p>
+                                       <form action="RoomRented" method="POST">
+                                            <input type="hidden" name="deptID" value="${rN.deptID}">
+                                            <input type="submit" value="Check-out">
+                                        </form>
                                     </div>
                                 </c:if>
                             </c:forEach>
@@ -85,7 +91,10 @@
                                         <p>Room Number: ${rN.deptID}</p>
                                         <p>Check-out: ${rN.time}</p>
                                         <p>Status: Rented</p>
-                                        <p><input type="button" value="Check-out"></p>
+                                        <form action="RoomRented" method="POST">
+                                            <input type="hidden" name="deptID" value="${rN.deptID}">
+                                            <input type="submit" value="Check-out">
+                                        </form>
                                     </div>
                                 </c:if>
                             </c:forEach>

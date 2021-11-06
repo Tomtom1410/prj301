@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Tom
@@ -13,6 +15,7 @@ public class Feedback {
     private int feedID;
     private Customer customer;
     private String feedbackContent;
+    private Date date;
 
     public Feedback() {
     }
@@ -39,6 +42,14 @@ public class Feedback {
 
     public void setFeedbackContent(String feedbackConten) {
         this.feedbackContent = feedbackConten;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
     
     

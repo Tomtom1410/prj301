@@ -8,6 +8,7 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Customer;
@@ -49,20 +50,23 @@ public class FeedBackDBContext extends DBContext {
                 PreparedStatement stm_getCusID = connection.prepareStatement(sql_getCusID);
                 rs = stm_getCusID.executeQuery();
                 if (rs.next()) {
+                    c = new Customer();
                     c.setCustomerID(rs.getInt("customerID"));
                 }
             } else {
                 String sql = "INSERT INTO [Feedback]\n"
-                        + "           ([FeedBack]\n"
-                        + "           ,[CustomerID])\n"
+                        + "           ([CustomerID]\n"
+                        + "           ,[FeedBack]\n"
+                        + "           ,[Date])\n"
                         + "     VALUES\n"
                         + "           (?\n"
+                        + "           ,?\n"
                         + "           ,?)";
                 stm = connection.prepareStatement(sql);
-                stm.setString(1, f.getFeedbackContent());
-                stm.setInt(2, c.getCustomerID());
+                stm.setInt(1, c.getCustomerID());
+                stm.setString(2, f.getFeedbackContent());
+                stm.setDate(3, f.getDate());
                 stm.executeUpdate();
-
             }
             connection.commit();
         } catch (SQLException ex) {
@@ -80,4 +84,98 @@ public class FeedBackDBContext extends DBContext {
             }
         }
     }
+
+    public ArrayList<Feedback> getFeedback(int pageIndex, int pageSize) {
+        ArrayList<Feedback> feedbacks = new ArrayList<>();
+        try {
+            String sql = "SELECT *  \n"
+                    + "FROM  (SELECT ROW_NUMBER() OVER (ORDER BY feedID desc) as rownum, \n"
+                    + "	feedID, Customer.CustomerID, CustomerName, Phone, Email, [Address],\n"
+                    + "	FeedBack.[Date], FeedBack.FeedBack	 \n"
+                    + "	FROM Feedback  \n"
+                    + "	inner join Customer on Customer.CustomerID = FeedBack.CustomerID\n"
+                    + "	)  as f  \n"
+                    + "WHERE  rownum >= (?-1)*?  + 1 AND rownum <=  ?*?";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, pageIndex);
+            stm.setInt(2, pageSize);
+            stm.setInt(3, pageIndex);
+            stm.setInt(4, pageSize);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Customer c = new Customer();
+                c.setCustomerID(rs.getInt("CustomerID"));
+                c.setCustomerName(rs.getString("CustomerName"));
+                c.setEmail(rs.getString("Email"));
+                c.setPhone(rs.getString("Phone"));
+                c.setAddress(rs.getString("Address"));
+                Feedback f = new Feedback();
+                f.setCustomer(c);
+                f.setFeedbackContent(rs.getString("FeedBack"));
+                f.setDate(rs.getDate("Date"));
+                f.setFeedID(rs.getInt("feedID"));
+                feedbacks.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FeedBackDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return feedbacks;
+    }
+
+    public int toltalFeedback() {
+        try {
+            String sql = "select count(*) as totalFeedBack from feedback";
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FeedBackDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return -1;
+    }
+
+    public ArrayList<Feedback> searchFeedbacks(String value) {
+        ArrayList<Feedback> feedbacks = new ArrayList<>();
+        try {
+            String sql = "SELECT feedID, Customer.CustomerID, CustomerName, Phone, Email, [Address],\n"
+                    + "        FeedBack.[Date], FeedBack.FeedBack \n"
+                    + "from Customer \n"
+                    + "inner join Feedback on Feedback.CustomerID = Customer.CustomerID\n"
+                    + "where CustomerName like ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + value + "%");
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Customer c = new Customer();
+                c.setCustomerID(rs.getInt("CustomerID"));
+                c.setCustomerName(rs.getString("CustomerName"));
+                c.setEmail(rs.getString("Email"));
+                c.setPhone(rs.getString("Phone"));
+                c.setAddress(rs.getString("Address"));
+                Feedback f = new Feedback();
+                f.setCustomer(c);
+                f.setFeedbackContent(rs.getString("FeedBack"));
+                f.setDate(rs.getDate("Date"));
+                f.setFeedID(rs.getInt("feedID"));
+                feedbacks.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FeedBackDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return feedbacks;
+    }
+
+//    public static void main(String[] args) {
+//        FeedBackDBContext fdb = new FeedBackDBContext();
+//        for (Feedback feedback : fdb.getFeedback(1, 10)) {
+//            System.out.println(feedback.getFeedID() + " " + feedback.getCustomer().getCustomerName());
+//        }
+//
+//        System.out.println(fdb.toltalFeedback());
+//    }
 }

@@ -181,12 +181,38 @@ public class DepartmentDBContext extends DBContext {
         }
         return departments;
     }
-    
-    public static void main(String[] args) {
-        DepartmentDBContext ddb = new DepartmentDBContext();
-        
-        for (Department department : ddb.getRoomByName("SILVER DOUBLE ROOM")) {
-            System.out.println(department.getDeptID());
+
+    public void checkOut(String depID) {
+        try {
+            connection.setAutoCommit(false);
+            String sql = "UPDATE [Department]\n"
+                    + "   SET [Status] = 0\n"
+                    + " WHERE deptID = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, depID);
+            stm.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(DepartmentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
+
+//    public static void main(String[] args) {
+//        DepartmentDBContext ddb = new DepartmentDBContext();
+//
+//        for (Department department : ddb.getRoomByName("SILVER DOUBLE ROOM")) {
+//            System.out.println(department.getDeptID());
+//        }
+//    }
 }

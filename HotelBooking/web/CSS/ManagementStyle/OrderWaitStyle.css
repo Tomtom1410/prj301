@@ -18,6 +18,19 @@
     width: 20rem;
     height: 4rem;
     margin: 5% 0;
+    font-size: 16px;
+}
+
+.right .row .Search button{
+    width: 5em;
+    height: 2em;
+    background: rgba(51, 122, 183, 1);
+    border: none;
+    color: white;
+}
+
+.right .row .Search button:hover{
+    background-color: blue;
 }
 
 .Banner ul{

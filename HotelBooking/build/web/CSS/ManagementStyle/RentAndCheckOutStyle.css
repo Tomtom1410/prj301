@@ -75,7 +75,7 @@
     text-align: center;
 }
 
-.pageLine{
+/*.pageLine{
     margin: 1%;
     float: right;
 }
@@ -100,7 +100,7 @@
     background-color: #d7cfcf;
     color: #e01717;
     font-weight: bold;
-}
+}*/
 
 .typeRoom {
     border-bottom: 1px solid grey;
@@ -133,9 +133,10 @@
     color: rgb(11, 145, 179);
     font-weight: bold;
 }
-
+.Room form{
+    padding: 0 2%;
+}
 .Room input {
-    /* margin: 0 0 0 40%; */
     background-color: red;
     border: none;
     color: white;
