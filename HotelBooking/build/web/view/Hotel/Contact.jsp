@@ -43,7 +43,7 @@
                                                title="Fullname cannot contain special characters!" required> *</td>
                                 </tr>
                                 <tr>
-                                    <td><input name="email" id ="email" type="text" placeholder="Email"
+                                    <td><input name="email" id ="email" type="email" placeholder="Email"
                                                pattern="^[a-z0-9A-Z]+@[a-zA-Z]+(\\.[a-zA-Z]+){1,3}+$" 
                                                title="Email in the form 'user@domain.com'" required> *</td>
                                 </tr>

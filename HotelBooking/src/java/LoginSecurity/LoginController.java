@@ -57,7 +57,8 @@ public class LoginController extends HttpServlet {
             request.getRequestDispatcher("view/Login/login.jsp").forward(request, response);
         }else{
             request.getSession().setAttribute("account", acc);
-            response.sendRedirect("Management/Home");
+            request.getSession().setMaxInactiveInterval(3000);
+            response.sendRedirect("Home");
         }
     }
 
