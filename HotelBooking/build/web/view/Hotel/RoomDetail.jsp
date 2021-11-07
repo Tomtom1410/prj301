@@ -83,7 +83,7 @@
                                            pattern="^[0-9]{9,20}$" title="Phone number must be number." required></td>
                             </tr>
                             <tr>
-                                <td><input id="email" class="in" type="text" name="email" placeholder="E-mail:"
+                                <td><input id="email" class="in" type="email" name="email" placeholder="E-mail:"
                                            pattern="^[a-z0-9A-Z]+@[a-zA-Z]+(\\.[a-zA-Z]+){1,3}+$" 
                                            title="Email in the form 'user@domain.com'" required></td>
                             </tr>

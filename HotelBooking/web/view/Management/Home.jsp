@@ -7,7 +7,7 @@
         <title>Del Luna Management</title>
         <link href="${pageContext.request.contextPath}/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/CSS/ManagementStyle/MenuStyle.css" rel="stylesheet" type="text/css" />
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     </head>
     <body>
         <div class="row main">
@@ -49,7 +49,7 @@
                 font-size: 12rem;
                 margin: 16% 0;
             }
-            
+
             .content span{
                 color: #0072ff73;
             }

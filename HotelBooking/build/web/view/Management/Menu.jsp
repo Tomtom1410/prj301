@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="col-md-2 left">
     <div>
-        <p><i class="glyphicon glyphicon-certificate"></i>Del Luna</p>
+        <p><i class="fas fa-cloud-moon"></i></span> Del Luna</p>
     </div>
     <div>
         <ul>
