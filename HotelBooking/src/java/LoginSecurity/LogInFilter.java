@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import model.Administrator;
 
 /**
@@ -32,7 +33,7 @@ public class LogInFilter implements Filter {
     private FilterConfig filterConfig = null;
     
     public LogInFilter() {
-    }    
+    }
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
@@ -60,7 +61,7 @@ public class LogInFilter implements Filter {
 	    log(buf.toString());
 	}
          */
-    }    
+    }
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
@@ -109,12 +110,13 @@ public class LogInFilter implements Filter {
         
         Throwable problem = null;
         try {
-             HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
             Administrator acc = (Administrator) req.getSession().getAttribute("account");
             if (acc != null) {
                 chain.doFilter(request, response);
-            }else{
-                req.getRequestDispatcher("../login").forward(request, response);
+            } else {
+                res.sendRedirect("../login");
             }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
@@ -158,16 +160,16 @@ public class LogInFilter implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
+            if (debug) {
                 log("LogInFilter:Initializing filter");
             }
         }
@@ -188,18 +190,18 @@ public class LogInFilter implements Filter {
     }
     
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
+        String stackTrace = getStackTrace(t);
         
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -232,7 +234,7 @@ public class LogInFilter implements Filter {
     }
     
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
     
 }
