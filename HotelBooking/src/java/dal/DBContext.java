@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dal;
 
 import java.sql.Connection;
@@ -16,7 +21,7 @@ public class DBContext {
         try {
             String user = "luongnthhe151453";
             String pass = "14052001";
-            String url = "jdbc:sqlserver://TOM\\SQLEXPRESS:1433;databaseName=Hotel_Booking";
+            String url = "jdbc:sqlserver://Tom\\SQLEXPRESS:1433;databaseName=Hotel_Booking";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException ex) {
@@ -24,6 +29,10 @@ public class DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }       
     
+    public static void main(String[] args) {
+        DBContext db = new DBContext();
+        System.out.println(db);
+    }
 }
